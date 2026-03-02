@@ -1,0 +1,2968 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Eye Glass Optics</title>
+  <link rel="manifest" href="manifest.json" />
+  <meta name="theme-color" content="#0057b8" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-title" content="Eye Glass Optics" />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Poppins:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #f4f8ff;
+      --bg2: #ffffff;
+      --textfinalcolor: #0a1628;
+      --surf: #0a1e3d;
+      --surf2: #0d2347;
+      --border: #c5d8f0;
+      --border2: #a0bfe8;
+      --accent: #0057b8;
+      --accent-d: #003d85;
+      --accent-lt: #e8f1ff;
+      --violet: #0091ea;
+      --green: #00a854;
+      --red: #e53935;
+      --amber: #f59e0b;
+      --wa: #25D366;
+      --text: #e8f2ff;
+      --muted: #5a7fa8;
+      --muted2: #7da3c8;
+      --head: 'Bebas Neue', sans-serif;
+      --body: 'Poppins', sans-serif;
+      --r: 12px;
+      --r-lg: 18px;
+      --shadow: 0 2px 12px rgba(0, 87, 184, .10);
+      --shadow-md: 0 4px 20px rgba(0, 87, 184, .15);
+    }
+
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--textfinalcolor);
+      font-family: var(--body);
+      font-size: 14px;
+      min-height: 100vh;
+      overflow-x: hidden
+    }
+
+    ::-webkit-scrollbar {
+      width: 3px;
+      height: 3px
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: var(--border2);
+      border-radius: 2px
+    }
+
+    /* LOADER */
+    #loader {
+      position: fixed;
+      inset: 0;
+      background: var(--bg);
+      z-index: 9999;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      transition: opacity .4s
+    }
+
+    .loader-eye {
+      width: 56px;
+      height: 56px
+    }
+
+    .loader-eye svg {
+      animation: blink 1.8s ease-in-out infinite
+    }
+
+    @keyframes blink {
+
+      0%,
+      100% {
+        transform: scaleY(1)
+      }
+
+      45%,
+      55% {
+        transform: scaleY(0.1)
+      }
+    }
+
+    #loader p {
+      margin-top: 18px;
+      font-family: var(--head);
+      font-size: 13px;
+      letter-spacing: 4px;
+      color: var(--accent);
+      text-transform: uppercase
+    }
+
+    /* UPLOAD BLOCKER */
+    #uploadBlocker {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 10, 30, .82);
+      backdrop-filter: blur(7px);
+      z-index: 8000;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 16px
+    }
+
+    #uploadBlocker.on {
+      display: flex
+    }
+
+    .upload-spinner {
+      width: 52px;
+      height: 52px;
+      border: 4px solid rgba(255, 255, 255, .2);
+      border-top-color: #0091ea;
+      border-radius: 50%;
+      animation: spin .9s linear infinite
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg)
+      }
+    }
+
+    #uploadBlocker p {
+      color: #fff;
+      font-size: 15px;
+      font-weight: 600
+    }
+
+    #uploadProgress {
+      color: #90caf9;
+      font-size: 12px
+    }
+
+    /* UI FREEZE */
+    #uiFreeze {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 7000;
+      background: rgba(0, 10, 30, .18);
+      backdrop-filter: blur(1px);
+      cursor: wait
+    }
+
+    #uiFreeze.on {
+      display: block
+    }
+
+    .nav-loading .bnav-btn {
+      opacity: .4;
+      pointer-events: none
+    }
+
+    #loadingBadge {
+      display: none;
+      align-items: center;
+      gap: 5px;
+      font-size: 11px;
+      font-weight: 600;
+      color: #90caf9
+    }
+
+    #loadingBadge.on {
+      display: flex
+    }
+
+    .lb-spin {
+      width: 12px;
+      height: 12px;
+      border: 2px solid rgba(255, 255, 255, .2);
+      border-top-color: #0091ea;
+      border-radius: 50%;
+      animation: spin .7s linear infinite
+    }
+
+    /* SETUP */
+    #setup {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: var(--bg);
+      z-index: 999;
+      overflow-y: auto;
+      padding: 28px 16px 48px
+    }
+
+    .setup-wrap {
+      max-width: 460px;
+      margin: 0 auto
+    }
+
+    .setup-logo {
+      font-family: var(--head);
+      font-size: 30px;
+      color: var(--accent);
+      margin-bottom: 4px;
+      letter-spacing: 1px
+    }
+
+    .setup-sub {
+      font-size: 13px;
+      color: var(--muted2);
+      margin-bottom: 32px
+    }
+
+    .step {
+      display: none
+    }
+
+    .step.on {
+      display: block;
+      animation: fadeUp .25s ease
+    }
+
+    .step-label {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--accent);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 8px
+    }
+
+    .step-label::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border)
+    }
+
+    /* APP */
+    #app {
+      display: none;
+      min-height: 100vh
+    }
+
+    /* TOPBAR */
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 200;
+      background: var(--surf);
+      border-bottom: 2px solid var(--accent);
+      padding: 0 16px;
+      height: 52px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: var(--shadow-md)
+    }
+
+    .topbar-left {
+      display: flex;
+      align-items: center;
+      gap: 10px
+    }
+
+    .t-logo {
+      font-family: var(--head);
+      font-size: 17px;
+      color: #fff;
+      letter-spacing: 1px
+    }
+
+    .t-logo span {
+      color: #90caf9
+    }
+
+    .branch-chip {
+      background: rgba(255, 255, 255, .12);
+      border: 1px solid rgba(255, 255, 255, .2);
+      border-radius: 20px;
+      padding: 4px 11px;
+      font-size: 11px;
+      font-weight: 600;
+      color: #fff;
+      cursor: pointer;
+      transition: all .18s;
+      user-select: none;
+      display: flex;
+      align-items: center;
+      gap: 5px
+    }
+
+    .branch-chip:active {
+      transform: scale(.96)
+    }
+
+    .branch-chip svg {
+      width: 8px;
+      height: 8px;
+      fill: #90caf9
+    }
+
+    .branch-chip.no-switch {
+      cursor: default;
+      opacity: .75
+    }
+
+    .branch-chip.no-switch:active {
+      transform: none
+    }
+
+    .topbar-right {
+      display: flex;
+      align-items: center;
+      gap: 8px
+    }
+
+    .fb-pill {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 11px;
+      font-weight: 600;
+      color: rgba(255, 255, 255, .65)
+    }
+
+    .fb-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--green);
+      animation: pulse-dot 2.5s ease-in-out infinite
+    }
+
+    .fb-dot.off {
+      background: var(--red);
+      animation: none
+    }
+
+    @keyframes pulse-dot {
+
+      0%,
+      100% {
+        opacity: 1
+      }
+
+      50% {
+        opacity: .3
+      }
+    }
+
+    /* BOTTOM NAV */
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      z-index: 200;
+      background: var(--surf);
+      border-top: 2px solid var(--accent);
+      display: flex;
+      padding: 6px 2px calc(6px + env(safe-area-inset-bottom));
+      box-shadow: 0 -4px 20px rgba(0, 87, 184, .2)
+    }
+
+    .bnav-btn {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2px;
+      padding: 5px 2px;
+      border: none;
+      background: transparent;
+      color: rgba(255, 255, 255, .4);
+      font-family: var(--body);
+      font-size: 9px;
+      font-weight: 500;
+      cursor: pointer;
+      border-radius: 8px;
+      transition: all .18s
+    }
+
+    .bnav-btn .icon {
+      font-size: 18px;
+      line-height: 1;
+      transition: transform .18s
+    }
+
+    .bnav-btn.on {
+      color: #fff
+    }
+
+    .bnav-btn.on .icon {
+      transform: scale(1.18)
+    }
+
+    .bnav-btn:active {
+      transform: scale(.9)
+    }
+
+    /* PAGES */
+    .page {
+      display: none;
+      padding: 14px 12px calc(76px + env(safe-area-inset-bottom));
+      max-width: 680px;
+      margin: 0 auto
+    }
+
+    .page.on {
+      display: block;
+      animation: fadeUp .22s ease
+    }
+
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(8px)
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0)
+      }
+    }
+
+    /* TYPOGRAPHY */
+    .page-title {
+      font-family: var(--head);
+      font-size: 22px;
+      color: var(--accent);
+      margin-bottom: 14px;
+      letter-spacing: .5px
+    }
+
+    .section-title {
+      font-family: var(--head);
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 8px
+    }
+
+    .section-title::before {
+      content: '';
+      width: 3px;
+      height: 13px;
+      background: var(--accent);
+      border-radius: 2px
+    }
+
+    /* CARDS */
+    .card {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: var(--r-lg);
+      padding: 16px 14px;
+      margin-bottom: 10px;
+      box-shadow: var(--shadow)
+    }
+
+    .card-sm {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: var(--r);
+      padding: 12px 13px;
+      margin-bottom: 8px;
+      box-shadow: var(--shadow);
+      transition: box-shadow .15s
+    }
+
+    .card-sm:hover {
+      box-shadow: var(--shadow-md)
+    }
+
+    /* FORM */
+    .fg {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      margin-bottom: 10px
+    }
+
+    .fg label {
+      font-size: 10px;
+      font-weight: 600;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: .5px
+    }
+
+    .fg input,
+    .fg select,
+    .fg textarea {
+      background: var(--bg);
+      border: 1.5px solid var(--border);
+      border-radius: var(--r);
+      padding: 10px 12px;
+      color: var(--textfinalcolor);
+      font-family: var(--body);
+      font-size: 13px;
+      outline: none;
+      transition: border-color .18s, box-shadow .18s;
+      width: 100%
+    }
+
+    .fg input:focus,
+    .fg select:focus,
+    .fg textarea:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(0, 87, 184, .1)
+    }
+
+    .fg select option {
+      background: var(--surf);
+      color: var(--text)
+    }
+
+    .fg textarea {
+      resize: vertical;
+      min-height: 60px
+    }
+
+    .row2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px
+    }
+
+    .row3 {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 8px
+    }
+
+    /* RX TABLE */
+    .rx-wrap {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      margin-bottom: 10px
+    }
+
+    .rx-tbl {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 340px
+    }
+
+    .rx-tbl th {
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: .5px;
+      padding: 5px 4px;
+      text-align: center;
+      background: var(--accent-lt)
+    }
+
+    .rx-tbl th:first-child {
+      border-radius: 8px 0 0 8px;
+      text-align: left;
+      padding-left: 8px
+    }
+
+    .rx-tbl th:last-child {
+      border-radius: 0 8px 8px 0
+    }
+
+    .rx-tbl td {
+      padding: 3px
+    }
+
+    .rx-tbl td input {
+      width: 100%;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 7px;
+      padding: 7px 3px;
+      color: var(--textfinalcolor);
+      font-size: 12px;
+      font-family: var(--body);
+      outline: none;
+      text-align: center;
+      transition: border-color .15s
+    }
+
+    .rx-tbl td input:focus {
+      border-color: var(--accent)
+    }
+
+    .rx-tbl td:first-child input {
+      font-weight: 700;
+      color: var(--accent);
+      background: transparent;
+      border: none;
+      text-align: left;
+      padding-left: 8px;
+      cursor: default
+    }
+
+    /* BUTTONS */
+    .btn {
+      padding: 10px 16px;
+      border-radius: var(--r);
+      border: none;
+      font-family: var(--body);
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all .18s;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px
+    }
+
+    .btn:active {
+      transform: scale(.96)
+    }
+
+    .btn:disabled {
+      opacity: .4;
+      cursor: not-allowed;
+      transform: none
+    }
+
+    .btn-accent {
+      background: var(--accent);
+      color: #fff;
+      box-shadow: 0 2px 8px rgba(0, 87, 184, .3)
+    }
+
+    .btn-accent:hover {
+      background: var(--accent-d)
+    }
+
+    .btn-ghost {
+      background: var(--accent-lt);
+      color: var(--accent);
+      border: 1.5px solid var(--border2)
+    }
+
+    .btn-ghost:hover {
+      background: var(--border)
+    }
+
+    .btn-green {
+      background: var(--green);
+      color: #fff
+    }
+
+    .btn-red {
+      background: rgba(229, 57, 53, .1);
+      color: var(--red);
+      border: 1px solid rgba(229, 57, 53, .25)
+    }
+
+    .btn-red:hover {
+      background: rgba(229, 57, 53, .2)
+    }
+
+    .btn-wa {
+      background: var(--wa);
+      color: #fff;
+      font-weight: 700
+    }
+
+    .btn-wa:hover {
+      background: #1da851
+    }
+
+    .btn-sm {
+      padding: 6px 11px;
+      font-size: 11px;
+      border-radius: 8px
+    }
+
+    .btn-full {
+      width: 100%
+    }
+
+    /* WA SHEET */
+    .overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 10, 30, .8);
+      backdrop-filter: blur(6px);
+      z-index: 500;
+      align-items: flex-end;
+      justify-content: center
+    }
+
+    .overlay.on {
+      display: flex;
+      animation: fadeIn .2s ease
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0
+      }
+
+      to {
+        opacity: 1
+      }
+    }
+
+    .sheet {
+      background: var(--surf);
+      border: 1px solid rgba(255, 255, 255, .1);
+      border-radius: 22px 22px 0 0;
+      padding: 22px 16px calc(22px + env(safe-area-inset-bottom));
+      width: 100%;
+      max-width: 500px;
+      max-height: 88vh;
+      overflow-y: auto;
+      animation: slideUp .28s cubic-bezier(.32, .72, 0, 1)
+    }
+
+    @keyframes slideUp {
+      from {
+        transform: translateY(40px);
+        opacity: 0
+      }
+
+      to {
+        transform: translateY(0);
+        opacity: 1
+      }
+    }
+
+    .sheet-handle {
+      width: 34px;
+      height: 4px;
+      background: rgba(255, 255, 255, .2);
+      border-radius: 2px;
+      margin: 0 auto 18px
+    }
+
+    .sheet-title {
+      font-family: var(--head);
+      font-size: 18px;
+      color: #fff;
+      margin-bottom: 14px
+    }
+
+    .wa-preview {
+      background: #0d1f0f;
+      border: 1px solid #1a3d1d;
+      border-radius: 12px;
+      padding: 14px;
+      margin-bottom: 14px;
+      font-family: 'Courier New', monospace;
+      font-size: 12px;
+      color: #c8e6c9;
+      line-height: 1.7;
+      white-space: pre-wrap;
+      word-break: break-word;
+      max-height: 280px;
+      overflow-y: auto
+    }
+
+    /* MODALS */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 10, 30, .8);
+      backdrop-filter: blur(5px);
+      z-index: 500;
+      align-items: center;
+      justify-content: center;
+      padding: 16px
+    }
+
+    .modal-overlay.on {
+      display: flex;
+      animation: fadeIn .2s ease
+    }
+
+    .modal {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: var(--r-lg);
+      padding: 22px 18px;
+      width: 100%;
+      max-width: 480px;
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: var(--shadow-md)
+    }
+
+    .modal-title {
+      font-family: var(--head);
+      font-size: 18px;
+      color: var(--accent);
+      margin-bottom: 16px;
+      letter-spacing: .5px
+    }
+
+    /* BADGES */
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 2px 8px;
+      border-radius: 20px;
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .3px
+    }
+
+    .b-green {
+      background: rgba(0, 168, 84, .12);
+      color: var(--green)
+    }
+
+    .b-red {
+      background: rgba(229, 57, 53, .12);
+      color: var(--red)
+    }
+
+    .b-amber {
+      background: rgba(245, 158, 11, .12);
+      color: var(--amber)
+    }
+
+    .b-cyan {
+      background: rgba(0, 87, 184, .12);
+      color: var(--accent)
+    }
+
+    .b-violet {
+      background: rgba(0, 145, 234, .12);
+      color: var(--violet)
+    }
+
+    .b-orange {
+      background: rgba(255, 107, 0, .12);
+      color: #ff6b00
+    }
+
+    /* KPI */
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-bottom: 14px
+    }
+
+    .kpi {
+      background: var(--bg2);
+      border: 1.5px solid var(--border);
+      border-radius: var(--r-lg);
+      padding: 14px 12px;
+      box-shadow: var(--shadow)
+    }
+
+    .kpi.hi {
+      border-color: var(--accent);
+      background: var(--accent-lt)
+    }
+
+    .kpi-lbl {
+      font-size: 9px;
+      font-weight: 600;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: .5px;
+      margin-bottom: 5px
+    }
+
+    .kpi-val {
+      font-family: var(--head);
+      font-size: 26px;
+      line-height: 1;
+      color: var(--textfinalcolor)
+    }
+
+    .kpi-val.c-accent {
+      color: var(--accent)
+    }
+
+    .kpi-val.c-green {
+      color: var(--green)
+    }
+
+    .kpi-val.c-red {
+      color: var(--red)
+    }
+
+    .kpi-sub {
+      font-size: 10px;
+      color: var(--muted);
+      margin-top: 3px
+    }
+
+    /* DASH FILTERS */
+    .dash-filters {
+      display: flex;
+      gap: 7px;
+      margin-bottom: 12px;
+      flex-wrap: wrap
+    }
+
+    .dash-filters select {
+      background: var(--bg2);
+      border: 1.5px solid var(--border);
+      border-radius: var(--r);
+      padding: 7px 10px;
+      color: var(--accent);
+      font-family: var(--body);
+      font-size: 12px;
+      outline: none;
+      cursor: pointer;
+      flex: 1;
+      min-width: 90px
+    }
+
+    /* PAGINATION */
+    .pagination {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 10px;
+      padding-top: 10px;
+      border-top: 1px solid var(--border)
+    }
+
+    .pagination span {
+      font-size: 11px;
+      color: var(--muted2)
+    }
+
+    .pagination button:disabled {
+      opacity: .35;
+      cursor: not-allowed
+    }
+
+    /* TABLE */
+    .tbl {
+      width: 100%;
+      border-collapse: collapse
+    }
+
+    .tbl th {
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: .5px;
+      padding: 8px;
+      text-align: left;
+      border-bottom: 2px solid var(--border)
+    }
+
+    .tbl td {
+      padding: 9px 8px;
+      font-size: 12px;
+      border-bottom: 1px solid var(--border);
+      vertical-align: middle
+    }
+
+    .tbl tr:last-child td {
+      border-bottom: none
+    }
+
+    .tbl tr:hover td {
+      background: var(--accent-lt)
+    }
+
+    /* SEARCH */
+    .search {
+      background: var(--bg2);
+      border: 1.5px solid var(--border);
+      border-radius: 50px;
+      padding: 9px 15px;
+      width: 100%;
+      color: var(--textfinalcolor);
+      font-family: var(--body);
+      font-size: 13px;
+      outline: none;
+      margin-bottom: 12px;
+      box-shadow: var(--shadow)
+    }
+
+    .search:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(0, 87, 184, .1)
+    }
+
+    /* ALERTS */
+    .alert-red {
+      background: rgba(229, 57, 53, .07);
+      border: 1px solid rgba(229, 57, 53, .25);
+      border-radius: var(--r);
+      padding: 10px 13px;
+      font-size: 12px;
+      color: var(--red);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 8px
+    }
+
+    .alert-cyan {
+      background: var(--accent-lt);
+      border: 1px solid var(--border2);
+      border-radius: var(--r);
+      padding: 10px 13px;
+      font-size: 12px;
+      color: var(--accent);
+      margin-bottom: 10px;
+      line-height: 1.6
+    }
+
+    .alert-amber {
+      background: rgba(245, 158, 11, .08);
+      border: 1px solid rgba(245, 158, 11, .3);
+      border-radius: var(--r);
+      padding: 10px 13px;
+      font-size: 12px;
+      color: var(--amber);
+      margin-bottom: 8px
+    }
+
+    /* EMPTY */
+    .empty {
+      text-align: center;
+      padding: 32px 16px;
+      color: var(--muted)
+    }
+
+    .empty .e-icon {
+      font-size: 36px;
+      margin-bottom: 10px;
+      opacity: .5
+    }
+
+    .empty p {
+      font-size: 12px
+    }
+
+    /* FOLLOW-UP */
+    .fu-card {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: var(--r-lg);
+      padding: 13px 14px;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      box-shadow: var(--shadow)
+    }
+
+    .fu-card .fc-name {
+      font-weight: 700;
+      font-size: 13px;
+      color: var(--textfinalcolor)
+    }
+
+    .fu-card .fc-sub {
+      font-size: 11px;
+      color: var(--muted2);
+      margin-top: 2px
+    }
+
+    /* ITEM ROW */
+    .item-row {
+      margin-bottom: 8px
+    }
+
+    .item-row-main {
+      display: grid;
+      grid-template-columns: 1fr 46px 66px 28px;
+      gap: 5px;
+      align-items: center
+    }
+
+    .item-row-main input,
+    .item-row-lens input,
+    .item-row-lens select {
+      background: var(--bg);
+      border: 1.5px solid var(--border);
+      border-radius: 8px;
+      padding: 8px 6px;
+      color: var(--textfinalcolor);
+      font-family: var(--body);
+      font-size: 12px;
+      outline: none;
+      width: 100%;
+      text-align: center;
+      transition: border-color .15s
+    }
+
+    .item-row-main input:first-child {
+      text-align: left;
+      padding-left: 9px
+    }
+
+    .item-row-main input:focus,
+    .item-row-lens input:focus,
+    .item-row-lens select:focus {
+      border-color: var(--accent)
+    }
+
+    .item-row-lens {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 5px;
+      margin-top: 4px
+    }
+
+    .item-row-lens select {
+      color: var(--accent)
+    }
+
+    .del-btn {
+      background: rgba(229, 57, 53, .1);
+      border: 1px solid rgba(229, 57, 53, .2);
+      color: var(--red);
+      border-radius: 7px;
+      padding: 8px 5px;
+      cursor: pointer;
+      font-size: 12px;
+      transition: all .15s;
+      width: 100%
+    }
+
+    .del-btn:active {
+      transform: scale(.9)
+    }
+
+    /* ── PARTIAL PAYMENT UI ── */
+    .pay-summary {
+      background: var(--accent-lt);
+      border: 1.5px solid var(--border2);
+      border-radius: var(--r);
+      padding: 12px 14px;
+      margin-bottom: 10px
+    }
+
+    .pay-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 4px;
+      font-size: 12px
+    }
+
+    .pay-row:last-child {
+      margin-bottom: 0
+    }
+
+    .pay-row .pr-lbl {
+      color: var(--muted)
+    }
+
+    .pay-row .pr-val {
+      font-weight: 700
+    }
+
+    .pay-row .pr-val.due {
+      color: var(--red)
+    }
+
+    .pay-row .pr-val.paid {
+      color: var(--green)
+    }
+
+    .pay-row .pr-val.partial {
+      color: var(--amber)
+    }
+
+    /* Payment log entries */
+    .plog {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 7px 10px;
+      border-radius: 8px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      margin-bottom: 5px;
+      font-size: 11px
+    }
+
+    .plog-amt {
+      font-weight: 700;
+      color: var(--green)
+    }
+
+    .plog-meta {
+      color: var(--muted2)
+    }
+
+    /* ── CUSTOMER TIMELINE ── */
+    .timeline {
+      position: relative;
+      padding-left: 22px;
+      margin-top: 8px
+    }
+
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 7px;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: var(--border);
+      border-radius: 1px
+    }
+
+    .tl-item {
+      position: relative;
+      margin-bottom: 14px
+    }
+
+    .tl-dot {
+      position: absolute;
+      left: -18px;
+      top: 3px;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: var(--accent);
+      border: 2px solid var(--bg2);
+      z-index: 1
+    }
+
+    .tl-dot.partial {
+      background: var(--amber)
+    }
+
+    .tl-dot.paid {
+      background: var(--green)
+    }
+
+    .tl-dot.pending {
+      background: var(--red)
+    }
+
+    .tl-card {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: var(--r);
+      padding: 10px 12px;
+      box-shadow: var(--shadow)
+    }
+
+    .tl-date {
+      font-size: 10px;
+      color: var(--muted2);
+      margin-bottom: 5px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center
+    }
+
+    .tl-bill {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--accent);
+      margin-bottom: 4px
+    }
+
+    .tl-items {
+      font-size: 11px;
+      color: var(--muted);
+      line-height: 1.6;
+      margin-bottom: 5px
+    }
+
+    .tl-rx {
+      background: var(--accent-lt);
+      border-radius: 7px;
+      padding: 6px 9px;
+      font-size: 10px;
+      color: var(--accent);
+      margin-bottom: 5px;
+      line-height: 1.8
+    }
+
+    .tl-pay {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 4px
+    }
+
+    .tl-total {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--green)
+    }
+
+    /* Customer filter bar */
+    .cust-filter-bar {
+      display: flex;
+      gap: 7px;
+      margin-bottom: 10px;
+      flex-wrap: wrap
+    }
+
+    .cust-filter-bar select {
+      background: var(--bg2);
+      border: 1.5px solid var(--border);
+      border-radius: var(--r);
+      padding: 7px 10px;
+      color: var(--accent);
+      font-family: var(--body);
+      font-size: 12px;
+      outline: none;
+      flex: 1;
+      min-width: 100px
+    }
+
+    /* STOCK */
+    .stock-group {
+      margin-bottom: 10px
+    }
+
+    .stock-group-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: var(--accent);
+      color: #fff;
+      border-radius: var(--r);
+      padding: 9px 13px;
+      cursor: pointer;
+      font-family: var(--head);
+      font-size: 13px;
+      letter-spacing: .5px;
+      user-select: none;
+      transition: background .15s
+    }
+
+    .stock-group-header:hover {
+      background: var(--accent-d)
+    }
+
+    .stock-group-header .sg-meta {
+      font-size: 11px;
+      font-weight: 400;
+      opacity: .8
+    }
+
+    .stock-group-header .sg-arrow {
+      transition: transform .2s;
+      font-size: 11px;
+      margin-left: 4px
+    }
+
+    .stock-group-header.collapsed .sg-arrow {
+      transform: rotate(-90deg)
+    }
+
+    .stock-group-body {
+      overflow: hidden;
+      transition: max-height .28s ease
+    }
+
+    .stock-group-body.collapsed {
+      max-height: 0 !important
+    }
+
+    .stock-row {
+      display: grid;
+      grid-template-columns: 22px 1fr auto 52px 72px;
+      gap: 8px;
+      align-items: center;
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 9px;
+      padding: 8px 10px;
+      margin-top: 5px;
+      box-shadow: var(--shadow)
+    }
+
+    .stock-row.low-stock {
+      border-left: 3px solid var(--red)
+    }
+
+    .stock-row.out-stock {
+      border-left: 3px solid var(--amber);
+      background: rgba(245, 158, 11, .03)
+    }
+
+    .sri-name {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--textfinalcolor)
+    }
+
+    .sri-meta {
+      font-size: 10px;
+      color: var(--muted2)
+    }
+
+    .stock-row-prices {
+      text-align: center
+    }
+
+    .stock-row-prices .sp-sell {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--green)
+    }
+
+    .stock-row-prices .sp-cost {
+      font-size: 10px;
+      color: var(--muted2)
+    }
+
+    .stock-row-qty {
+      font-family: var(--head);
+      font-size: 20px;
+      text-align: right;
+      white-space: nowrap
+    }
+
+    .stock-row-qty.qty-low {
+      color: var(--red)
+    }
+
+    .stock-row-qty.qty-ok {
+      color: var(--green)
+    }
+
+    .stock-row-qty span {
+      font-size: 9px;
+      font-weight: 400;
+      color: var(--muted);
+      display: block;
+      text-align: right
+    }
+
+    .stock-row-actions {
+      display: flex;
+      gap: 4px;
+      justify-content: flex-end
+    }
+
+    .oos-section {
+      margin-top: 16px
+    }
+
+    .oos-header {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--amber);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 12px;
+      background: rgba(245, 158, 11, .08);
+      border-radius: var(--r);
+      border: 1px solid rgba(245, 158, 11, .25)
+    }
+
+    .bulk-bar {
+      display: none;
+      position: sticky;
+      bottom: calc(70px + env(safe-area-inset-bottom));
+      z-index: 100;
+      background: var(--surf);
+      border: 1.5px solid var(--accent);
+      border-radius: var(--r-lg);
+      padding: 10px 14px;
+      margin: 6px 0;
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      box-shadow: var(--shadow-md)
+    }
+
+    .bulk-bar.on {
+      display: flex;
+      animation: fadeUp .2s ease
+    }
+
+    .bulk-bar-info {
+      font-size: 13px;
+      font-weight: 600;
+      color: #fff
+    }
+
+    .json-upload-zone {
+      border: 2px dashed var(--border2);
+      border-radius: var(--r-lg);
+      padding: 18px;
+      text-align: center;
+      margin-bottom: 10px;
+      background: var(--accent-lt);
+      cursor: pointer;
+      transition: border-color .2s
+    }
+
+    .json-upload-zone:hover {
+      border-color: var(--accent)
+    }
+
+    .json-upload-zone p {
+      font-size: 11px;
+      color: var(--muted2);
+      margin-top: 5px
+    }
+
+    /* SETTINGS */
+    .si {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--border)
+    }
+
+    .si:last-child {
+      border-bottom: none
+    }
+
+    .si-lbl {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--textfinalcolor)
+    }
+
+    .si-sub {
+      font-size: 10px;
+      color: var(--muted2);
+      margin-top: 1px
+    }
+
+    /* TOAST */
+    #toast-box {
+      position: fixed;
+      top: 62px;
+      right: 10px;
+      z-index: 9000;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      pointer-events: none
+    }
+
+    .toast {
+      background: var(--surf);
+      border: 1px solid rgba(255, 255, 255, .15);
+      border-radius: 10px;
+      padding: 10px 14px;
+      font-size: 12px;
+      font-weight: 500;
+      max-width: 260px;
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      animation: toastIn .25s ease;
+      pointer-events: all;
+      color: #fff
+    }
+
+    .toast.ok {
+      border-color: rgba(0, 168, 84, .5)
+    }
+
+    .toast.err {
+      border-color: rgba(229, 57, 53, .5)
+    }
+
+    .toast.info {
+      border-color: rgba(0, 87, 184, .5)
+    }
+
+    @keyframes toastIn {
+      from {
+        opacity: 0;
+        transform: translateX(12px)
+      }
+
+      to {
+        opacity: 1;
+        transform: translateX(0)
+      }
+    }
+
+    @media(max-width:400px) {
+
+      .row2,
+      .row3 {
+        grid-template-columns: 1fr
+      }
+
+      .kpi-val {
+        font-size: 22px
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- LOADER -->
+  <div id="loader">
+    <div class="loader-eye">
+      <svg width="56" height="56" viewBox="0 0 56 56" fill="none">
+        <ellipse cx="28" cy="28" rx="26" ry="18" stroke="#1a2f4a" stroke-width="2.5" />
+        <ellipse cx="28" cy="28" rx="26" ry="18" stroke="#0057b8" stroke-width="2" stroke-dasharray="48 80"
+          stroke-dashoffset="0">
+          <animateTransform attributeName="transform" type="rotate" from="0 28 28" to="360 28 28" dur="2s"
+            repeatCount="indefinite" />
+        </ellipse>
+        <circle cx="28" cy="28" r="10" fill="#0a1e3d" />
+        <circle cx="28" cy="28" r="7" fill="#0057b8" opacity=".9" />
+        <circle cx="31" cy="25" r="2.5" fill="white" opacity=".6" />
+      </svg>
+    </div>
+    <p>Eye Glass Optics</p>
+  </div>
+
+  <div id="uploadBlocker">
+    <div class="upload-spinner"></div>
+    <p id="uploadMsg">Uploading items…</p>
+    <p id="uploadProgress">Please wait, do not close this page.</p>
+  </div>
+  <div id="uiFreeze"></div>
+  <div id="toast-box"></div>
+
+  <!-- SETUP -->
+  <div id="setup">
+    <div class="setup-wrap">
+      <div class="setup-logo">👓 Eye Glass Optics</div>
+      <div class="setup-sub">One-time setup — takes 3 minutes</div>
+      <div class="step on" id="step-1">
+        <div class="step-label">Step 1 of 3 · Firebase Database</div>
+        <div class="alert-cyan" style="margin-bottom:14px;">Firebase is a free Google service. Follow
+          <strong>SETUP_GUIDE.md</strong> to get your 3 keys.
+        </div>
+        <div class="fg"><label>Firebase API Key</label><input type="text" id="cfg-apiKey" placeholder="AIzaSy…"
+            autocomplete="off" /></div>
+        <div class="fg"><label>Project ID</label><input type="text" id="cfg-projectId" placeholder="my-eyeglass-shop"
+            autocomplete="off" /></div>
+        <div class="fg" style="margin-bottom:18px;"><label>App ID</label><input type="text" id="cfg-appId"
+            placeholder="1:123456:web:abc…" autocomplete="off" /></div>
+        <button class="btn btn-accent btn-full" onclick="goStep(2)">Next →</button>
+      </div>
+      <div class="step" id="step-2">
+        <div class="step-label">Step 2 of 3 · Shop Details</div>
+        <div class="fg"><label>Shop Name *</label><input type="text" id="cfg-shopName" placeholder="Eye Glass Optics" />
+        </div>
+        <div class="row2">
+          <div class="fg"><label>Branch 1 Name</label><input type="text" id="cfg-b1" placeholder="Virar East" /></div>
+          <div class="fg"><label>Branch 2 (blank = single)</label><input type="text" id="cfg-b2"
+              placeholder="Leave blank if single" /></div>
+        </div>
+        <div class="fg"><label>WhatsApp Number</label><input type="tel" id="cfg-phone" placeholder="917875074180" />
+        </div>
+        <div class="fg" style="margin-bottom:18px;"><label>Address</label><textarea id="cfg-addr"
+            placeholder="Shop address…"></textarea></div>
+        <div style="display:flex;gap:8px;">
+          <button class="btn btn-ghost" onclick="goStep(1)" style="flex:1;">← Back</button>
+          <button class="btn btn-accent" onclick="goStep(3)" style="flex:2;">Next →</button>
+        </div>
+      </div>
+      <div class="step" id="step-3">
+        <div class="step-label">Step 3 of 3 · Done!</div>
+        <div style="text-align:center;padding:22px 0 26px;">
+          <div style="font-size:50px;margin-bottom:12px;">🎉</div>
+          <div style="font-family:var(--head);font-size:22px;color:var(--accent);margin-bottom:8px;">You're all set!
+          </div>
+          <div style="font-size:12px;color:var(--muted2);line-height:1.8;">Open in Chrome → tap menu (⋮) → <strong>Add
+              to Home screen</strong></div>
+        </div>
+        <button class="btn btn-green btn-full" onclick="finishSetup()">Open Eye Glass Optics →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MAIN APP -->
+  <div id="app">
+    <div class="topbar">
+      <div class="topbar-left">
+        <div class="t-logo">👓 <span>EYE GLASS</span> OPTICS</div>
+        <div class="branch-chip" onclick="flipBranch()" id="branchChip">
+          <svg viewBox="0 0 10 10">
+            <circle cx="5" cy="5" r="4" />
+          </svg>
+          <span id="branchLabel">Branch 1</span>
+        </div>
+      </div>
+      <div class="topbar-right">
+        <div id="loadingBadge">
+          <div class="lb-spin"></div><span style="font-size:10px;color:#90caf9;">Loading…</span>
+        </div>
+        <div class="fb-pill">
+          <div class="fb-dot" id="fbDot"></div><span id="fbLabel">Live</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- DASHBOARD -->
+    <div class="page on" id="p-dash">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+        <div class="page-title" style="margin:0;">Dashboard</div>
+        <div style="font-size:10px;color:var(--muted2);text-align:right;line-height:1.6;" id="dashDate"></div>
+      </div>
+      <div class="dash-filters">
+        <select id="filterType" onchange="onFilterChange()">
+          <option value="today">Today</option>
+          <option value="week">This Week</option>
+          <option value="month">This Month</option>
+          <option value="quarter">This Quarter</option>
+          <option value="year">This Year</option>
+          <option value="all">All Time</option>
+        </select>
+        <select id="filterMonth" style="display:none;" onchange="renderDash()">
+          <option value="0">Jan</option>
+          <option value="1">Feb</option>
+          <option value="2">Mar</option>
+          <option value="3">Apr</option>
+          <option value="4">May</option>
+          <option value="5">Jun</option>
+          <option value="6">Jul</option>
+          <option value="7">Aug</option>
+          <option value="8">Sep</option>
+          <option value="9">Oct</option>
+          <option value="10">Nov</option>
+          <option value="11">Dec</option>
+        </select>
+        <select id="filterYear" style="display:none;" onchange="renderDash()"></select>
+      </div>
+      <div class="kpi-grid">
+        <div class="kpi hi">
+          <div class="kpi-lbl">Bills (Period)</div>
+          <div class="kpi-val c-accent" id="k-bills">0</div>
+          <div class="kpi-sub">this branch</div>
+        </div>
+        <div class="kpi">
+          <div class="kpi-lbl">Revenue (Period)</div>
+          <div class="kpi-val c-green" id="k-rev">₹0</div>
+          <div class="kpi-sub">all payments</div>
+        </div>
+        <div class="kpi">
+          <div class="kpi-lbl">Customers</div>
+          <div class="kpi-val" id="k-custs">0</div>
+          <div class="kpi-sub" id="k-custs-sub">all time</div>
+        </div>
+        <div class="kpi">
+          <div class="kpi-lbl">Low Stock</div>
+          <div class="kpi-val c-red" id="k-low">0</div>
+          <div class="kpi-sub">need reorder</div>
+        </div>
+        <div class="kpi">
+          <div class="kpi-lbl">Est. Profit</div>
+          <div class="kpi-val c-green" id="k-profit">₹0</div>
+          <div class="kpi-sub">revenue − cost</div>
+        </div>
+        <div class="kpi">
+          <div class="kpi-lbl">Pending Dues</div>
+          <div class="kpi-val c-red" id="k-dues">₹0</div>
+          <div class="kpi-sub">partial unpaid</div>
+        </div>
+      </div>
+      <div id="stockAlerts"></div>
+      <div class="card">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+          <div class="section-title" style="margin:0;">Recent Bills</div>
+          <select id="billsPerPage" onchange="DASH_PAGE=1;renderDash()"
+            style="background:var(--bg);border:1px solid var(--border);border-radius:7px;padding:3px 7px;color:var(--accent);font-size:11px;outline:none;">
+            <option value="5">5</option>
+            <option value="10" selected>10</option>
+            <option value="20">20</option>
+            <option value="50">50</option>
+          </select>
+        </div>
+        <div id="recentBills"></div>
+        <div class="pagination" id="billsPagination" style="display:none;">
+          <button class="btn btn-ghost btn-sm" onclick="dashPrev()">← Prev</button>
+          <span id="billsPageInfo">Page 1</span>
+          <button class="btn btn-ghost btn-sm" onclick="dashNext()">Next →</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- NEW BILL -->
+    <div class="page" id="p-bill">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;">
+        <div class="page-title" style="margin:0;">New Bill</div>
+        <button class="btn btn-ghost btn-sm" onclick="clearBill()">🗑 Clear</button>
+      </div>
+      <div class="card">
+        <div class="section-title">Customer</div>
+        <div class="row2">
+          <div class="fg"><label>Customer Name *</label><input type="text" id="bName" placeholder="Full name"
+              oninput="autofillCust(this.value)" list="custNameList" /><datalist id="custNameList"></datalist></div>
+          <div class="fg"><label>Phone *</label><input type="tel" id="bPhone" placeholder="10 digits" maxlength="10" />
+          </div>
+        </div>
+        <div class="row2">
+          <div class="fg"><label>Age</label><input type="number" id="bAge" placeholder="Age" min="1" max="120" /></div>
+          <div class="fg"><label>Bill Date</label><input type="date" id="bDate" /></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="section-title">Eye Prescription (Rx)</div>
+        <div class="rx-wrap">
+          <table class="rx-tbl">
+            <thead>
+              <tr>
+                <th>Eye</th>
+                <th>SPH</th>
+                <th>CYL</th>
+                <th>AXIS</th>
+                <th>ADD</th>
+                <th>VA</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><input type="text" value="Right (R)" readonly /></td>
+                <td><input type="text" id="rRsph" placeholder="+0.00" /></td>
+                <td><input type="text" id="rRcyl" placeholder="-0.00" /></td>
+                <td><input type="text" id="rRaxis" placeholder="0°" /></td>
+                <td><input type="text" id="rRadd" placeholder="0.00" /></td>
+                <td><input type="text" id="rRva" placeholder="6/6" /></td>
+              </tr>
+              <tr>
+                <td><input type="text" value="Left (L)" readonly /></td>
+                <td><input type="text" id="rLsph" placeholder="+0.00" /></td>
+                <td><input type="text" id="rLcyl" placeholder="-0.00" /></td>
+                <td><input type="text" id="rLaxis" placeholder="0°" /></td>
+                <td><input type="text" id="rLadd" placeholder="0.00" /></td>
+                <td><input type="text" id="rLva" placeholder="6/6" /></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="fg"><label>Doctor</label><input type="text" id="bDoctor" placeholder="Dr. Sharma" /></div>
+      </div>
+      <div class="card">
+        <div class="section-title">Items / Products</div>
+        <div style="display:grid;grid-template-columns:1fr 46px 66px 28px;gap:5px;margin-bottom:4px;padding:0 2px;">
+          <div style="font-size:9px;font-weight:700;color:var(--muted);text-transform:uppercase;">Description</div>
+          <div style="font-size:9px;font-weight:700;color:var(--muted);text-transform:uppercase;text-align:center;">Qty
+          </div>
+          <div
+            style="font-size:9px;font-weight:700;color:var(--muted);text-transform:uppercase;text-align:right;padding-right:4px;">
+            ₹ Rate</div>
+          <div></div>
+        </div>
+        <datalist id="stockSuggestions"></datalist>
+        <div id="itemsBox"></div>
+        <button class="btn btn-ghost btn-sm" onclick="addItem()" style="margin-top:3px;">+ Add Item</button>
+      </div>
+      <div class="card">
+        <div class="section-title">Payment</div>
+        <div class="row2">
+          <div class="fg"><label>Subtotal (₹)</label><input type="number" id="bSub" readonly
+              style="color:var(--accent);font-weight:700;" /></div>
+          <div class="fg"><label>Discount (₹)</label><input type="number" id="bDisc" placeholder="0" value="0"
+              oninput="calcTot()" /></div>
+        </div>
+        <div class="row2">
+          <div class="fg"><label>Total (₹)</label><input type="number" id="bTotal" readonly
+              style="color:var(--green);font-weight:700;font-size:15px;" /></div>
+          <div class="fg"><label>Payment Mode</label>
+            <select id="bPay" onchange="onPayModeChange()">
+              <option value="Cash">Cash</option>
+              <option value="UPI / GPay">UPI / GPay</option>
+              <option value="PhonePe">PhonePe</option>
+              <option value="Card">Card</option>
+              <option value="Partial">Partial Payment</option>
+              <option value="Credit (Pending)">Credit (Pending)</option>
+            </select>
+          </div>
+        </div>
+        <!-- PARTIAL PAYMENT SECTION — shown only when Partial is selected -->
+        <div id="partialSection" style="display:none;">
+          <div
+            style="background:rgba(245,158,11,.08);border:1.5px solid rgba(245,158,11,.35);border-radius:var(--r);padding:12px 13px;margin-bottom:10px;">
+            <div
+              style="font-size:11px;font-weight:700;color:var(--amber);margin-bottom:8px;text-transform:uppercase;letter-spacing:.5px;">
+              💰 Partial Payment Details</div>
+            <div class="row2">
+              <div class="fg" style="margin:0;">
+                <label>Amount Paid Now (₹)</label>
+                <input type="number" id="bAdvance" placeholder="e.g. 500" oninput="calcTot()" />
+              </div>
+              <div class="fg" style="margin:0;">
+                <label>Due Amount (₹)</label>
+                <input type="number" id="bDue" readonly style="color:var(--red);font-weight:700;" />
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="fg"><label>Notes</label><textarea id="bNotes"
+            placeholder="Ready date, special instructions…"></textarea></div>
+      </div>
+      <div style="display:flex;gap:8px;padding-bottom:18px;">
+        <button class="btn btn-accent" id="btnSaveBill" onclick="saveBill()" style="flex:3;">💾 Save Bill</button>
+        <button class="btn btn-wa" onclick="waPreviewOnly()" style="flex:2;">💬 Preview WA</button>
+      </div>
+    </div>
+
+    <!-- CUSTOMERS -->
+    <div class="page" id="p-custs">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+        <div class="page-title" style="margin:0;">Customers</div>
+        <button class="btn btn-ghost btn-sm" onclick="exportCustomersJSON()">⬇ Export</button>
+      </div>
+      <input type="text" class="search" id="custSearch" placeholder="🔍  Search name or phone…"
+        oninput="CUST_PAGE=1;renderCusts()" />
+      <div id="custCount" style="margin-bottom:8px;font-size:11px;color:var(--muted2);text-align:center;"></div>
+      <!-- Filter bar -->
+      <div class="cust-filter-bar">
+        <select id="custFilterPeriod" onchange="CUST_PAGE=1;renderCusts()">
+          <option value="6m">Last 6 Months</option>
+          <option value="1y">Last 1 Year</option>
+          <option value="all">All Time</option>
+        </select>
+        <select id="custFilterPay" onchange="CUST_PAGE=1;renderCusts()">
+          <option value="all">All Payments</option>
+          <option value="partial">Partial / Due</option>
+          <option value="paid">Fully Paid</option>
+        </select>
+      </div>
+      <div id="custList"></div>
+      <!-- Pagination -->
+      <div class="pagination" id="custPagination" style="display:none;">
+        <button class="btn btn-ghost btn-sm" onclick="custPrev()">← Prev</button>
+        <span id="custPageInfo">Page 1</span>
+        <button class="btn btn-ghost btn-sm" onclick="custNext()">Next →</button>
+      </div>
+      <div style="margin-top:8px;font-size:10px;color:var(--muted2);text-align:center;" id="custLimitNote"></div>
+    </div>
+
+    <!-- STOCK -->
+    <div class="page" id="p-stock">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+        <div class="page-title" style="margin:0;">Stock</div>
+        <div style="display:flex;gap:6px;">
+          <button class="btn btn-ghost btn-sm" onclick="openJsonUploadModal()">📤 JSON Import</button>
+          <button class="btn btn-accent btn-sm" onclick="openStockModal()">+ Add</button>
+        </div>
+      </div>
+      <select id="stockCatFilter" onchange="renderStock()"
+        style="background:var(--bg2);border:1.5px solid var(--border);border-radius:var(--r);padding:8px 12px;color:var(--accent);font-family:var(--body);font-size:12px;outline:none;width:100%;margin-bottom:10px;">
+        <option value="">All Categories</option>
+        <option>Lens – Single Vision</option>
+        <option>Lens – Bifocal</option>
+        <option>Lens – Progressive</option>
+        <option>Lens – Photochromic</option>
+        <option>Lens – Anti-Glare</option>
+        <option>Lens – Blue Cut</option>
+        <option>Frame – Metal</option>
+        <option>Frame – Plastic</option>
+        <option>Frame – Kids</option>
+        <option>Frame – Rimless</option>
+        <option>Sunglasses</option>
+        <option>Contact Lens – Daily</option>
+        <option>Contact Lens – Monthly</option>
+        <option>Contact Lens – Yearly</option>
+        <option>Reading Glasses</option>
+        <option>Eye Drops</option>
+        <option>Accessories</option>
+        <option>Other</option>
+      </select>
+      <div class="bulk-bar" id="bulkBar">
+        <div class="bulk-bar-info">☑ <span id="bulkCount">0</span> items selected</div>
+        <div style="display:flex;gap:6px;">
+          <button class="btn btn-ghost btn-sm" onclick="clearBulkSelection()">✕ Clear</button>
+          <button class="btn btn-red btn-sm" onclick="bulkDeleteSelected()">🗑 Delete Selected</button>
+        </div>
+      </div>
+      <div id="stockList"></div>
+      <div class="oos-section" id="oosSection" style="display:none;">
+        <div class="oos-header">⚠ Out of Stock / Empty (qty = 0)</div>
+        <div id="oosList"></div>
+        <div style="margin-top:8px;"><button class="btn btn-red btn-sm" onclick="deleteAllOOS()">🗑 Delete All Empty
+            Items</button></div>
+      </div>
+    </div>
+
+    <!-- FOLLOW-UP -->
+    <div class="page" id="p-fu">
+      <div class="page-title">Follow-Up</div>
+      <div class="alert-cyan">Customers who got glasses <strong>7–8 months ago</strong> are listed here.</div>
+      <div id="fuList"></div>
+    </div>
+
+    <!-- SETTINGS -->
+    <div class="page" id="p-set">
+      <div class="page-title">Settings</div>
+      <div class="card">
+        <div class="section-title">Shop Info</div>
+        <div class="fg"><label>Shop Name</label><input type="text" id="sName" /></div>
+        <div class="row2">
+          <div class="fg"><label>Branch 1</label><input type="text" id="sB1" /></div>
+          <div class="fg"><label>Branch 2 (blank = single)</label><input type="text" id="sB2"
+              placeholder="Leave blank if single" /></div>
+        </div>
+        <div class="fg"><label>WhatsApp / Phone</label><input type="tel" id="sPhone" /></div>
+        <div class="fg" style="margin-bottom:12px;"><label>Address</label><textarea id="sAddr"></textarea></div>
+        <button class="btn btn-accent btn-sm" onclick="saveSettings()">Save Changes</button>
+      </div>
+      <div class="card">
+        <div class="section-title">Backup & Restore</div>
+        <div class="si">
+          <div>
+            <div class="si-lbl">Export Backup</div>
+            <div class="si-sub">Download full JSON</div>
+          </div><button class="btn btn-ghost btn-sm" onclick="exportData()">Export</button>
+        </div>
+        <div class="si">
+          <div>
+            <div class="si-lbl">Import / Restore</div>
+            <div class="si-sub">Restore from backup file</div>
+          </div><label class="btn btn-ghost btn-sm" style="cursor:pointer;">Import<input type="file" accept=".json"
+              onchange="importData(event)" style="display:none;" /></label>
+        </div>
+        <div class="si">
+          <div>
+            <div class="si-lbl">Send Backup to WhatsApp</div>
+            <div class="si-sub">Share summary to yourself</div>
+          </div><button class="btn btn-wa btn-sm" onclick="backupWA()">Share</button>
+        </div>
+      </div>
+      <div class="card">
+        <div class="section-title">About</div>
+        <p style="font-size:12px;color:var(--muted2);line-height:1.8;">Eye Glass Optics v2.3 — Built for optical
+          shops.<br />Firebase storage. Works offline. ❤️</p>
+      </div>
+    </div>
+
+    <nav class="bottom-nav" id="bottomNav">
+      <button class="bnav-btn on" onclick="nav('dash')" data-p="dash"><span class="icon">📊</span>Home</button>
+      <button class="bnav-btn" onclick="nav('bill')" data-p="bill"><span class="icon">🧾</span>New Bill</button>
+      <button class="bnav-btn" onclick="nav('custs')" data-p="custs"><span class="icon">👤</span>Customers</button>
+      <button class="bnav-btn" onclick="nav('stock')" data-p="stock"><span class="icon">📦</span>Stock</button>
+      <button class="bnav-btn" onclick="nav('fu')" data-p="fu"><span class="icon">🔔</span>Follow-Up</button>
+      <button class="bnav-btn" onclick="nav('set')" data-p="set"><span class="icon">⚙️</span>Settings</button>
+    </nav>
+  </div>
+
+  <!-- WA SHEET -->
+  <div class="overlay" id="waSheet">
+    <div class="sheet">
+      <div class="sheet-handle"></div>
+      <div class="sheet-title">📱 WhatsApp Bill</div>
+      <div class="wa-preview" id="waPreviewText"></div>
+      <div style="margin-bottom:8px;font-size:11px;color:var(--muted2);">Send to customer's number:</div>
+      <div class="row2" style="margin-bottom:12px;">
+        <div class="fg" style="margin:0;"><label>Customer Phone</label><input type="tel" id="waPhone"
+            placeholder="10 digits" maxlength="10" /></div>
+        <div style="display:flex;flex-direction:column;justify-content:flex-end;"><button class="btn btn-wa btn-full"
+            onclick="sendWA()">Send on WhatsApp</button></div>
+      </div>
+      <button class="btn btn-ghost btn-full" onclick="closeSheet()" style="color:#fff;">Close</button>
+    </div>
+  </div>
+
+  <!-- CUSTOMER DETAIL MODAL (full history + payment) -->
+  <div class="modal-overlay" id="custModal">
+    <div class="modal" style="max-width:520px;">
+      <div class="modal-title" id="custModalTitle">Customer</div>
+      <div id="custModalBody"></div>
+      <div style="display:flex;gap:8px;margin-top:16px;flex-wrap:wrap;">
+        <button class="btn btn-wa btn-sm" onclick="waCust()" style="flex:1;">💬 WhatsApp</button>
+        <button class="btn btn-accent btn-sm" onclick="rebill()" style="flex:1;">+ New Bill</button>
+        <button class="btn btn-red btn-sm" onclick="delCust()" style="flex:1;">🗑 Delete Record</button>
+        <button class="btn btn-ghost btn-sm" onclick="closeModal()" style="flex:1;">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ADD PAYMENT MODAL (for partial bills) -->
+  <div class="modal-overlay" id="addPayModal">
+    <div class="modal">
+      <div class="modal-title">💰 Add Payment</div>
+      <div id="addPayBillInfo" style="margin-bottom:12px;font-size:12px;color:var(--muted2);"></div>
+      <div class="fg"><label>Amount Paid (₹)</label><input type="number" id="addPayAmt" placeholder="Enter amount" />
+      </div>
+      <div class="fg"><label>Payment Mode</label>
+        <select id="addPayMode">
+          <option>Cash</option>
+          <option>UPI / GPay</option>
+          <option>PhonePe</option>
+          <option>Card</option>
+        </select>
+      </div>
+      <div class="fg"><label>Date</label><input type="date" id="addPayDate" /></div>
+      <div style="display:flex;gap:8px;margin-top:12px;">
+        <button class="btn btn-ghost" onclick="closeModal()" style="flex:1;">Cancel</button>
+        <button class="btn btn-green" id="btnAddPay" onclick="confirmAddPayment()" style="flex:2;">✓ Save
+          Payment</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ADD STOCK MODAL -->
+  <div class="modal-overlay" id="stockModal">
+    <div class="modal">
+      <div class="modal-title">Add Stock Item</div>
+      <div class="fg"><label>Item Name *</label><input type="text" id="stName"
+          placeholder="e.g. CR39 Single Vision Lens" /></div>
+      <div class="row2">
+        <div class="fg"><label>Category</label>
+          <select id="stCat">
+            <option>Lens – Single Vision</option>
+            <option>Lens – Bifocal</option>
+            <option>Lens – Progressive</option>
+            <option>Lens – Photochromic</option>
+            <option>Lens – Anti-Glare</option>
+            <option>Lens – Blue Cut</option>
+            <option>Frame – Metal</option>
+            <option>Frame – Plastic</option>
+            <option>Frame – Kids</option>
+            <option>Frame – Rimless</option>
+            <option>Sunglasses</option>
+            <option>Contact Lens – Daily</option>
+            <option>Contact Lens – Monthly</option>
+            <option>Contact Lens – Yearly</option>
+            <option>Reading Glasses</option>
+            <option>Eye Drops</option>
+            <option>Accessories</option>
+            <option>Other</option>
+          </select>
+        </div>
+        <div class="fg"><label>Unit</label><select id="stUnit">
+            <option>Pairs</option>
+            <option>Pieces</option>
+            <option>Boxes</option>
+            <option>Sets</option>
+          </select></div>
+      </div>
+      <div class="row2">
+        <div class="fg"><label>Current Qty</label><input type="number" id="stQty" placeholder="0" min="0" /></div>
+        <div class="fg"><label>Alert Below</label><input type="number" id="stMin" placeholder="5" min="0" /></div>
+      </div>
+      <div class="row2">
+        <div class="fg"><label>Cost Price (₹)</label><input type="number" id="stCost" placeholder="0" /></div>
+        <div class="fg"><label>Sell Price (₹)</label><input type="number" id="stSell" placeholder="0" /></div>
+      </div>
+      <div style="display:flex;gap:8px;margin-top:12px;">
+        <button class="btn btn-ghost" onclick="closeModal()" style="flex:1;">Cancel</button>
+        <button class="btn btn-accent" id="btnSaveStock" onclick="saveStock()" style="flex:2;">Save Item</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- JSON UPLOAD MODAL -->
+  <div class="modal-overlay" id="jsonModal">
+    <div class="modal">
+      <div class="modal-title">📤 Bulk Import via JSON</div>
+      <div class="alert-cyan" style="margin-bottom:12px;">Upload a JSON array. Existing items (by name) are updated, new
+        items added.</div>
+      <pre
+        style="background:var(--surf);color:#90caf9;border-radius:10px;padding:12px;font-size:11px;overflow-x:auto;line-height:1.7;margin-bottom:10px;">[{ "name":"CR39 SV", "cat":"Lens – Single Vision", "unit":"Pairs", "qty":20, "minQty":5, "costPrice":150, "sellPrice":400 }]</pre>
+      <div style="margin-bottom:10px;"><button class="btn btn-ghost btn-sm" onclick="downloadJsonTemplate()">⬇ Download
+          Template</button></div>
+      <label class="json-upload-zone" for="jsonFileInput">
+        <div style="font-size:26px;">📂</div>
+        <div style="font-size:13px;font-weight:600;color:var(--accent);margin-top:5px;">Tap to select JSON file</div>
+        <p>Must be .json format</p>
+        <input type="file" id="jsonFileInput" accept=".json" style="display:none;" onchange="handleJsonUpload(event)" />
+      </label>
+      <button class="btn btn-ghost btn-full" onclick="closeModal()" style="margin-top:4px;">Cancel</button>
+    </div>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import { getFirestore, collection, addDoc, getDocs, doc, updateDoc, deleteDoc, query, where, serverTimestamp }
+      from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+    // ── STATE ──────────────────────────────────────────────────────────────────
+    let db = null;
+    let CFG = JSON.parse(localStorage.getItem('oc_cfg') || 'null');
+    let BR = localStorage.getItem('oc_br') || 'b1';
+    let ITEMS = [{ desc: '', qty: 1, rate: 0, lensType: '', brand: '', power: '' }];
+    let CUSTS = [], BILLS = [], STOCK = [];
+    let CUR_CUST_ID = null, LAST_BILL = null;
+    let DASH_PAGE = 1, CUST_PAGE = 1;
+    let SELECTED_STOCK = new Set();
+    let IS_LOADING = false;
+    let ADD_PAY_BILL_ID = null; // current bill being paid
+
+    const CUST_PER_PAGE = 50;
+    const CUST_LIMIT = 600;
+
+    // ── BOOT ───────────────────────────────────────────────────────────────────
+    window.addEventListener('load', async () => {
+      await sleep(1000); fade('loader'); await sleep(450);
+      $('loader').style.display = 'none';
+      CFG ? initFB() : showSetup();
+    });
+
+    function showSetup() { $('setup').style.display = 'block'; }
+
+    function initFB() {
+      try {
+        const app = initializeApp({
+          apiKey: CFG.apiKey, authDomain: `${CFG.projectId}.firebaseapp.com`,
+          projectId: CFG.projectId, storageBucket: `${CFG.projectId}.appspot.com`, appId: CFG.appId
+        });
+        db = getFirestore(app); setFBStatus(true);
+      } catch (e) { setFBStatus(false); toast('Firebase error — offline', 'err'); }
+      launchApp();
+    }
+
+    function launchApp() {
+      $('app').style.display = 'block';
+      $('bDate').value = today();
+      $('addPayDate').value = today();
+      loadSettings(); refreshAll();
+      $('dashDate').textContent = new Date().toLocaleDateString('en-IN', { weekday: 'long', day: 'numeric', month: 'long' });
+      renderItems(); checkBranchVisibility(); populateYearFilter();
+    }
+
+    // ── UI FREEZE ───────────────────────────────────────────────────────────────
+    function freezeUI() {
+      IS_LOADING = true;
+      $('uiFreeze').classList.add('on');
+      $('loadingBadge').classList.add('on');
+      $('bottomNav')?.classList.add('nav-loading');
+    }
+    function unfreezeUI() {
+      IS_LOADING = false;
+      $('uiFreeze').classList.remove('on');
+      $('loadingBadge').classList.remove('on');
+      $('bottomNav')?.classList.remove('nav-loading');
+    }
+
+    // ── BRANCH ──────────────────────────────────────────────────────────────────
+    function checkBranchVisibility() {
+      const chip = $('branchChip'); if (!chip) return;
+      const has2 = CFG?.b2 && CFG.b2.trim() !== '';
+      chip.style.display = 'flex';
+      if (has2) { chip.classList.remove('no-switch'); chip.title = 'Tap to switch branch'; }
+      else { chip.classList.add('no-switch'); chip.title = CFG?.b1 || 'Branch 1'; BR = 'b1'; localStorage.setItem('oc_br', 'b1'); }
+      if ($('branchLabel')) $('branchLabel').textContent = brLabel();
+    }
+
+    window.flipBranch = function () {
+      if (!CFG?.b2 || CFG.b2.trim() === '') return;
+      if (IS_LOADING) return;
+      BR = BR === 'b1' ? 'b2' : 'b1';
+      localStorage.setItem('oc_br', BR);
+      $('branchLabel').textContent = brLabel();
+      refreshAll(); toast(`Switched to ${brLabel()}`, 'info');
+    };
+
+    // ── FILTER HELPERS ──────────────────────────────────────────────────────────
+    function populateYearFilter() {
+      const sel = $('filterYear'); if (!sel) return;
+      const yr = new Date().getFullYear(); sel.innerHTML = '';
+      for (let y = yr; y >= yr - 4; y--) sel.innerHTML += `<option value="${y}"${y === yr ? ' selected' : ''}>${y}</option>`;
+      const ms = $('filterMonth'); if (ms) ms.value = new Date().getMonth();
+    }
+    window.onFilterChange = function () {
+      const ft = $('filterType')?.value;
+      if ($('filterMonth')) $('filterMonth').style.display = ft === 'month' ? 'block' : 'none';
+      if ($('filterYear')) $('filterYear').style.display = ft === 'month' ? 'block' : 'none';
+      DASH_PAGE = 1; renderDash();
+    };
+    function billInRange(b) {
+      if (!b.date) return false;
+      const ft = $('filterType')?.value || 'today', now = new Date(), bd = new Date(b.date);
+      if (ft === 'today') return b.date === today();
+      if (ft === 'week') { const sw = new Date(now); sw.setDate(now.getDate() - now.getDay()); sw.setHours(0, 0, 0, 0); return bd >= sw; }
+      if (ft === 'month') { const sm = parseInt($('filterMonth')?.value ?? now.getMonth()), sy = parseInt($('filterYear')?.value ?? now.getFullYear()); return bd.getMonth() === sm && bd.getFullYear() === sy; }
+      if (ft === 'quarter') { const q = Math.floor(now.getMonth() / 3); return Math.floor(bd.getMonth() / 3) === q && bd.getFullYear() === now.getFullYear(); }
+      if (ft === 'year') return bd.getFullYear() === now.getFullYear();
+      return true;
+    }
+
+    // ── SETUP ───────────────────────────────────────────────────────────────────
+    window.goStep = function (n) {
+      if (n === 2) { const k = v('cfg-apiKey'), p = v('cfg-projectId'), a = v('cfg-appId'); if (!k || !p || !a) { toast('Fill all Firebase fields', 'err'); return; } localStorage.setItem('oc_fb_tmp', JSON.stringify({ apiKey: k, projectId: p, appId: a })); }
+      if (n === 3) { const sn = v('cfg-shopName'); if (!sn) { toast('Enter shop name', 'err'); return; } const fb = JSON.parse(localStorage.getItem('oc_fb_tmp') || '{}'); CFG = { ...fb, shopName: sn, b1: v('cfg-b1') || 'Branch 1', b2: v('cfg-b2') || '', phone: v('cfg-phone'), addr: v('cfg-addr') }; localStorage.setItem('oc_cfg', JSON.stringify(CFG)); }
+      document.querySelectorAll('.step').forEach(s => s.classList.remove('on'));
+      $(`step-${n}`).classList.add('on');
+    };
+    window.finishSetup = function () { $('setup').style.display = 'none'; $('loader').style.display = 'flex'; $('loader').style.opacity = '1'; setTimeout(initFB, 700); };
+
+    // ── UTILS ───────────────────────────────────────────────────────────────────
+    const v = id => $(id)?.value?.trim() || '';
+    const $ = id => document.getElementById(id);
+    const sleep = ms => new Promise(r => setTimeout(r, ms));
+    const today = () => new Date().toISOString().split('T')[0];
+    const fade = id => { const el = $(id); if (el) el.style.opacity = '0'; };
+    const brLabel = () => BR === 'b1' ? (CFG?.b1 || 'Branch 1') : (CFG?.b2 || 'Branch 2');
+    const fmt = n => '₹' + Number(n || 0).toLocaleString('en-IN');
+
+    function setFBStatus(ok) { $('fbDot').classList.toggle('off', !ok); $('fbLabel').textContent = ok ? 'Live' : 'Offline'; }
+    window.toast = function (msg, type = 'info') {
+      const el = document.createElement('div'); el.className = `toast ${type}`;
+      el.innerHTML = `<span>${type === 'ok' ? '✓' : type === 'err' ? '✗' : 'ℹ'}</span> ${msg}`;
+      $('toast-box').appendChild(el); setTimeout(() => el.remove(), 3400);
+    };
+
+    // ── UPLOAD BLOCKER ───────────────────────────────────────────────────────────
+    function showBlocker(msg = 'Processing…') { $('uploadBlocker').classList.add('on'); $('uploadMsg').textContent = msg; }
+    function hideBlocker() { $('uploadBlocker').classList.remove('on'); }
+    function setProgress(txt) { $('uploadProgress').textContent = txt; }
+
+    // ── NAVIGATION ───────────────────────────────────────────────────────────────
+    window.nav = function (id) {
+      if (IS_LOADING) return;
+      document.querySelectorAll('.page').forEach(p => p.classList.remove('on'));
+      document.querySelectorAll('.bnav-btn').forEach(b => b.classList.remove('on'));
+      $(`p-${id}`).classList.add('on');
+      document.querySelector(`[data-p="${id}"]`).classList.add('on');
+      if (id === 'custs') renderCusts();
+      if (id === 'stock') renderStock();
+      if (id === 'fu') renderFU();
+      if (id === 'dash') renderDash();
+      if (id === 'set') loadSettings();
+    };
+
+    // ── FIRESTORE ────────────────────────────────────────────────────────────────
+    async function fbAdd(col, data) {
+      if (!db) return localAdd(col, data);
+      try { const r = await addDoc(collection(db, col), { ...data, branch: BR, ts: serverTimestamp() }); return r.id; }
+      catch (e) { toast('Save failed: ' + e.message, 'err'); return null; }
+    }
+    async function fbAll(col) {
+      if (!db) return localAll(col);
+      try {
+        const q = col === 'customers' ? collection(db, col) : query(collection(db, col), where('branch', '==', BR));
+        const s = await getDocs(q);
+        return s.docs.map(d => ({ id: d.id, ...d.data() }));
+      } catch (e) { toast('Load error — cached', 'info'); return localAll(col); }
+    }
+    async function fbPatch(col, id, data) {
+      if (!db) { localPatch(col, id, data); return; }
+      try { await updateDoc(doc(db, col, id), data); }
+      catch (e) { toast('Update failed: ' + e.message, 'err'); }
+    }
+    async function fbDel(col, id) {
+      if (!db) { localDel(col, id); return; }
+      try { await deleteDoc(doc(db, col, id)); }
+      catch (e) { toast('Delete failed: ' + e.message, 'err'); }
+    }
+
+    function lKey(col) { return `oc_local_${col}`; }
+    function localAll(col) { const a = JSON.parse(localStorage.getItem(lKey(col)) || '[]'); return col === 'customers' ? a : a.filter(x => x.branch === BR); }
+    function localAdd(col, data) { const a = JSON.parse(localStorage.getItem(lKey(col)) || '[]'); const item = { id: Date.now().toString(), ...data, branch: BR, ts: new Date().toISOString() }; a.push(item); localStorage.setItem(lKey(col), JSON.stringify(a)); return item.id; }
+    function localPatch(col, id, data) { const a = JSON.parse(localStorage.getItem(lKey(col)) || '[]'); const i = a.findIndex(x => x.id === id); if (i > -1) { a[i] = { ...a[i], ...data }; localStorage.setItem(lKey(col), JSON.stringify(a)); } }
+    function localDel(col, id) { const a = JSON.parse(localStorage.getItem(lKey(col)) || '[]').filter(x => x.id !== id); localStorage.setItem(lKey(col), JSON.stringify(a)); }
+
+    async function refreshAll() {
+      freezeUI();
+      try { [CUSTS, BILLS, STOCK] = await Promise.all([fbAll('customers'), fbAll('bills'), fbAll('stock')]); renderDash(); updateSuggestions(); }
+      catch (e) { toast('Refresh error', 'err'); }
+      finally { unfreezeUI(); }
+    }
+
+    // ── PAYMENT HELPERS ──────────────────────────────────────────────────────────
+    // Returns total actually paid for a bill (advance + all subsequent payments)
+    function billPaidAmount(b) {
+      const advance = Number(b.advance || 0);
+      const logs = (b.paymentLog || []).reduce((s, p) => s + Number(p.amount || 0), 0);
+      return advance + logs;
+    }
+    function billStatus(b) {
+      const total = Number(b.total || 0);
+      if (b.payMode === 'Credit (Pending)' && billPaidAmount(b) === 0) return 'pending';
+      const paid = billPaidAmount(b);
+      if (paid >= total) return 'paid';
+      if (paid > 0) return 'partial';
+      return 'pending';
+    }
+    function billDue(b) { return Math.max(0, Number(b.total || 0) - billPaidAmount(b)); }
+
+    // ── DASHBOARD ────────────────────────────────────────────────────────────────
+    function renderDash() {
+      const filtered = BILLS.filter(billInRange);
+      const rev = filtered.reduce((s, b) => s + billPaidAmount(b), 0);
+      const totalDues = BILLS.reduce((s, b) => s + billDue(b), 0);
+      const low = STOCK.filter(s => Number(s.qty) <= Number(s.minQty || 5));
+      let totalCost = 0;
+      filtered.forEach(b => { (b.items || []).forEach(it => { const si = STOCK.find(s => s.name.toLowerCase().includes((it.desc || '').toLowerCase()) || (it.desc || '').toLowerCase().includes(s.name.toLowerCase())); if (si) totalCost += Number(si.costPrice || 0) * Number(it.qty || 1); }); });
+      const estProfit = rev - totalCost;
+      const ft = $('filterType')?.value || 'today';
+      $('k-bills').textContent = filtered.length;
+      $('k-rev').textContent = fmt(rev);
+      $('k-custs').textContent = ft === 'all' ? CUSTS.length : new Set(filtered.map(b => b.custId || b.phone)).size;
+      $('k-custs-sub').textContent = ft === 'all' ? 'all time' : 'in period';
+      $('k-low').textContent = low.length;
+      $('k-profit').textContent = fmt(Math.max(0, estProfit));
+      $('k-profit').className = 'kpi-val ' + (estProfit >= 0 ? 'c-green' : 'c-red');
+      $('k-dues').textContent = fmt(totalDues);
+      $('stockAlerts').innerHTML = low.map(s => `<div class="alert-red">⚠️ <strong>${s.name}</strong> — only ${s.qty} ${s.unit || 'units'} left</div>`).join('');
+      const perPage = parseInt($('billsPerPage')?.value || '10');
+      const sorted = [...BILLS].sort((a, b) => new Date(b.ts || 0) - new Date(a.ts || 0));
+      const total = sorted.length, maxPage = Math.max(1, Math.ceil(total / perPage));
+      if (DASH_PAGE > maxPage) DASH_PAGE = maxPage;
+      const paged = sorted.slice((DASH_PAGE - 1) * perPage, DASH_PAGE * perPage);
+      const stMap = { paid: 'b-green', partial: 'b-amber', pending: 'b-red' };
+      $('recentBills').innerHTML = paged.length === 0
+        ? `<div class="empty"><div class="e-icon">🧾</div><p>No bills yet</p></div>`
+        : `<table class="tbl"><thead><tr><th>Customer</th><th>Total</th><th>Status</th><th></th></tr></thead><tbody>
+        ${paged.map(b => {
+          const st = billStatus(b); return `<tr>
+          <td><div style="font-weight:600;">${b.custName}</div><div style="font-size:10px;color:var(--muted2)">${b.billNo || ''} · ${b.date || ''}</div></td>
+          <td><div style="color:var(--green);font-weight:700;">${fmt(b.total)}</div>${billDue(b) > 0 ? `<div style="font-size:10px;color:var(--red);">Due: ${fmt(billDue(b))}</div>` : ''}</td>
+          <td><span class="badge ${stMap[st]}">${st}</span></td>
+          <td style="display:flex;gap:4px;">
+            <button class="btn btn-ghost btn-sm" onclick="viewBill('${b.id}')">💬</button>
+            <button class="btn btn-ghost btn-sm" onclick="delBill('${b.id}')" style="color:var(--red);">🗑</button>
+          </td>
+        </tr>`}).join('')}
+      </tbody></table>`;
+      const pag = $('billsPagination');
+      if (total > perPage) { pag.style.display = 'flex'; $('billsPageInfo').textContent = `Page ${DASH_PAGE} of ${maxPage} (${total})`; pag.querySelector('button:first-child').disabled = DASH_PAGE <= 1; pag.querySelector('button:last-child').disabled = DASH_PAGE >= maxPage; }
+      else pag.style.display = 'none';
+    }
+    window.dashNext = function () { const m = Math.ceil(BILLS.length / parseInt($('billsPerPage')?.value || '10')); if (DASH_PAGE < m) { DASH_PAGE++; renderDash(); } };
+    window.dashPrev = function () { if (DASH_PAGE > 1) { DASH_PAGE--; renderDash(); } };
+
+    // ── NEW BILL ─────────────────────────────────────────────────────────────────
+    window.onPayModeChange = function () {
+      const mode = $('bPay')?.value;
+      $('partialSection').style.display = mode === 'Partial' ? 'block' : 'none';
+      calcTot();
+    };
+    window.addItem = function () { ITEMS.push({ desc: '', qty: 1, rate: 0, lensType: '', brand: '', power: '' }); renderItems(); };
+    function updateSuggestions() {
+      const dl = $('stockSuggestions'); if (dl) dl.innerHTML = STOCK.map(s => `<option value="${s.name}">`).join('');
+      const cn = $('custNameList'); if (cn) cn.innerHTML = CUSTS.map(c => `<option value="${c.name}">`).join('');
+    }
+    function renderItems() {
+      updateSuggestions();
+      $('itemsBox').innerHTML = ITEMS.map((it, i) => {
+        const isLens = (it.desc || '').toLowerCase().includes('lens');
+        const lensBlock = isLens ? `<div class="item-row-lens">
+      <select onchange="upItem(${i},'lensType',this.value)">
+        <option value=""${!it.lensType ? ' selected' : ''}>Lens Type</option>
+        ${['Single Vision', 'Bifocal', 'Progressive', 'Photochromic', 'Anti-Glare', 'Blue Cut', 'Contact Lens'].map(t => `<option${it.lensType === t ? ' selected' : ''}>${t}</option>`).join('')}
+      </select>
+      <input type="text" placeholder="Brand" value="${it.brand || ''}" onchange="upItem(${i},'brand',this.value)"/>
+      <input type="text" placeholder="Power" value="${it.power || ''}" onchange="upItem(${i},'power',this.value)"/>
+    </div>` : '';
+        return `<div class="item-row"><div class="item-row-main">
+      <input type="text" placeholder="Item description" value="${it.desc}" list="stockSuggestions"
+        oninput="upItem(${i},'desc',this.value);renderItems()" onchange="upItem(${i},'desc',this.value)"/>
+      <input type="number" placeholder="Qty" value="${it.qty}" min="1" onchange="upItem(${i},'qty',+this.value)"/>
+      <input type="number" placeholder="₹" value="${it.rate || ''}" onchange="upItem(${i},'rate',+this.value)"/>
+      <button class="del-btn" onclick="delItem(${i})">✕</button>
+    </div>${lensBlock}</div>`;
+      }).join('');
+      calcTot();
+    }
+    window.upItem = function (i, f, val) {
+      ITEMS[i][f] = val;
+      if (f === 'desc') { const m = STOCK.find(s => s.name.toLowerCase() === val.toLowerCase()); if (m && !ITEMS[i].rate) ITEMS[i].rate = Number(m.sellPrice || 0); }
+      calcTot();
+    };
+    window.delItem = function (i) { if (ITEMS.length > 1) { ITEMS.splice(i, 1); renderItems(); } };
+    window.calcTot = function () {
+      const sub = ITEMS.reduce((s, it) => s + (it.qty * it.rate), 0);
+      const disc = Number($('bDisc')?.value || 0);
+      const total = sub - disc;
+      if ($('bSub')) $('bSub').value = sub;
+      if ($('bTotal')) $('bTotal').value = total;
+      if ($('bPay')?.value === 'Partial') {
+        const adv = Number($('bAdvance')?.value || 0);
+        if ($('bDue')) $('bDue').value = Math.max(0, total - adv);
+      }
+    };
+    window.clearBill = function () {
+      ['bName', 'bPhone', 'bAge', 'bDoctor', 'bNotes', 'bAdvance', 'bDue'].forEach(id => { if ($(id)) $(id).value = ''; });
+      ['rRsph', 'rRcyl', 'rRaxis', 'rRadd', 'rRva', 'rLsph', 'rLcyl', 'rLaxis', 'rLadd', 'rLva'].forEach(id => { if ($(id)) $(id).value = ''; });
+      if ($('bDisc')) $('bDisc').value = 0;
+      if ($('bDate')) $('bDate').value = today();
+      if ($('bPay')) $('bPay').value = 'Cash';
+      $('partialSection').style.display = 'none';
+      ITEMS = [{ desc: '', qty: 1, rate: 0, lensType: '', brand: '', power: '' }]; CUR_CUST_ID = null; renderItems(); toast('Form cleared', 'info');
+    };
+    function buildBillObj() {
+      const name = v('bName'), phone = v('bPhone');
+      if (!name) { toast('Enter customer name', 'err'); return null; }
+      if (!phone || phone.length < 10) { toast('Enter valid 10-digit phone', 'err'); return null; }
+      const filled = ITEMS.filter(it => it.desc.trim() && it.rate > 0);
+      if (!filled.length) { toast('Add at least one item with price', 'err'); return null; }
+      const payMode = $('bPay')?.value || 'Cash';
+      let advance = 0;
+      if (payMode === 'Partial') advance = Number($('bAdvance')?.value || 0);
+      else if (payMode !== 'Credit (Pending)') advance = Number($('bTotal')?.value || 0);
+
+      return {
+        custName: name, phone, age: v('bAge'), date: v('bDate'), doctor: v('bDoctor'),
+        rx: { R: { sph: v('rRsph'), cyl: v('rRcyl'), axis: v('rRaxis'), add: v('rRadd'), va: v('rRva') }, L: { sph: v('rLsph'), cyl: v('rLcyl'), axis: v('rLaxis'), add: v('rLadd'), va: v('rLva') } },
+        items: filled,
+        subtotal: Number($('bSub')?.value || 0), discount: Number($('bDisc')?.value || 0), total: Number($('bTotal')?.value || 0),
+        payMode: $('bPay')?.value || 'Cash',
+        advance, // amount paid at time of billing (partial only)
+        paymentLog: [], // subsequent payments go here
+        notes: v('bNotes')
+      };
+    }
+    window.saveBill = async function () {
+      const data = buildBillObj(); if (!data) return;
+      const btn = $('btnSaveBill'); if (btn) { btn.disabled = true; btn.textContent = '⏳ Saving…'; }
+      freezeUI();
+      try {
+        let cid = CUR_CUST_ID;
+        const ex = CUSTS.find(c => c.phone === data.phone);
+        if (ex) { cid = ex.id; await fbPatch('customers', cid, { name: data.custName, lastVisit: data.date, rx: data.rx, doctor: data.doctor }); }
+        else { cid = await fbAdd('customers', { name: data.custName, phone: data.phone, age: data.age, firstVisit: data.date, lastVisit: data.date, rx: data.rx, doctor: data.doctor }); }
+        const num = BILLS.length + 1, billNo = `${BR.toUpperCase()}-${new Date().getFullYear()}-${String(num).padStart(4, '0')}`;
+        const bid = await fbAdd('bills', { ...data, billNo, custId: cid });
+        if (bid) { toast('Bill saved! ✓', 'ok'); LAST_BILL = { ...data, billNo, id: bid }; await refreshAll(); openWASheet(LAST_BILL); }
+      } catch (e) { toast('Save error: ' + e.message, 'err'); }
+      finally { unfreezeUI(); if (btn) { btn.disabled = false; btn.textContent = '💾 Save Bill'; } }
+    };
+
+    // ── PARTIAL PAYMENT: ADD MORE PAYMENTS ───────────────────────────────────────
+    window.openAddPayment = function (billId) {
+      const b = BILLS.find(x => x.id === billId); if (!b) return;
+      ADD_PAY_BILL_ID = billId;
+      const due = billDue(b);
+      $('addPayBillInfo').innerHTML = `
+    <div class="pay-summary">
+      <div class="pay-row"><span class="pr-lbl">Bill No</span><span class="pr-val">${b.billNo || '—'}</span></div>
+      <div class="pay-row"><span class="pr-lbl">Total</span><span class="pr-val">${fmt(b.total)}</span></div>
+      <div class="pay-row"><span class="pr-lbl">Paid So Far</span><span class="pr-val paid">${fmt(billPaidAmount(b))}</span></div>
+      <div class="pay-row"><span class="pr-lbl">Remaining Due</span><span class="pr-val due">${fmt(due)}</span></div>
+    </div>`;
+      $('addPayAmt').value = due > 0 ? due : '';
+      $('addPayDate').value = today();
+      $('addPayModal').classList.add('on');
+    };
+
+    window.confirmAddPayment = async function () {
+      const amt = Number($('addPayAmt')?.value || 0);
+      if (!amt || amt <= 0) { toast('Enter valid amount', 'err'); return; }
+      const b = BILLS.find(x => x.id === ADD_PAY_BILL_ID); if (!b) return;
+      const due = billDue(b);
+      if (amt > due) { toast(`Amount exceeds due (${fmt(due)})`, 'err'); return; }
+      const btn = $('btnAddPay'); if (btn) { btn.disabled = true; btn.textContent = '⏳ Saving…'; }
+      freezeUI();
+      try {
+        const newLog = [...(b.paymentLog || []), { amount: amt, mode: $('addPayMode')?.value || 'Cash', date: $('addPayDate')?.value || today(), addedAt: new Date().toISOString() }];
+        const newPaid = billPaidAmount(b) + amt;
+        const newStatus = newPaid >= Number(b.total || 0) ? 'paid' : 'partial';
+        await fbPatch('bills', ADD_PAY_BILL_ID, { paymentLog: newLog, payMode: newStatus === 'paid' ? 'Paid (Full)' : b.payMode });
+        await refreshAll();
+        closeModal();
+        toast(newStatus === 'paid' ? '🎉 Bill fully paid!' : `Payment of ${fmt(amt)} recorded`, 'ok');
+        // Auto-send WA if fully paid
+        if (newStatus === 'paid') {
+          const updated = BILLS.find(x => x.id === ADD_PAY_BILL_ID);
+          if (updated) { LAST_BILL = updated; openWASheet(updated); }
+        }
+      } catch (e) { toast('Error: ' + e.message, 'err'); }
+      finally { unfreezeUI(); if (btn) { btn.disabled = false; btn.textContent = '✓ Save Payment'; } }
+    };
+
+    // ── WHATSAPP ──────────────────────────────────────────────────────────────────
+    function buildWAMsg(b) {
+      const c = CFG || {};
+      const items = b.items.map(it => {
+        let l = `  • ${it.desc} ×${it.qty} = ${fmt(it.qty * it.rate)}`;
+        if (it.lensType) l += ` (${it.lensType}${it.brand ? ' – ' + it.brand : ''}${it.power ? ' | ' + it.power : ''})`;
+        return l;
+      }).join('\n');
+      const rx = b.rx, hasRx = rx && (rx.R?.sph || rx.R?.cyl || rx.L?.sph || rx.L?.cyl);
+      const rxBlock = hasRx ? `\n👁️ *Prescription:*\n  Right → SPH:${rx.R?.sph || '—'} CYL:${rx.R?.cyl || '—'} AXIS:${rx.R?.axis || '—'} ADD:${rx.R?.add || '—'}\n  Left  → SPH:${rx.L?.sph || '—'} CYL:${rx.L?.cyl || '—'} AXIS:${rx.L?.axis || '—'} ADD:${rx.L?.add || '—'}\n` : '';
+      const paid = billPaidAmount(b);
+      const due = billDue(b);
+      const payBlock = due > 0
+        ? `💰 Paid: ${fmt(paid)}\n💸 *Remaining Due: ${fmt(due)}*`
+        : `💰 *Fully Paid: ${fmt(paid)}*`;
+      return `👓 *${c.shopName || 'Eye Glass Optics'}* | ${brLabel()}\n━━━━━━━━━━━━━━━━━━━━\n📋 *Bill No:* ${b.billNo}\n📅 *Date:* ${b.date}\n👤 *Name:* ${b.custName}\n${b.doctor ? `💊 *Dr:* ${b.doctor}\n` : ''}${rxBlock}\n🛍️ *Items:*\n${items}\n━━━━━━━━━━━━━━━━━━━━\n${b.discount > 0 ? `💸 Discount: -${fmt(b.discount)}\n` : ''}${payBlock}\n💳 Mode: ${b.payMode}\n${b.notes ? `📝 ${b.notes}\n` : ''}\nThank you! 🙏 | 📞 ${c.phone || ''}\n${c.addr || ''}`;
+    }
+    function openWASheet(b) { $('waPreviewText').textContent = buildWAMsg(b); $('waPhone').value = b.phone || ''; $('waSheet').classList.add('on'); }
+    window.waPreviewOnly = function () { const d = buildBillObj(); if (!d) return; LAST_BILL = { ...d, billNo: 'PREVIEW' }; openWASheet(LAST_BILL); };
+    window.sendWA = function () {
+      if (!LAST_BILL) return;
+      const ph = ($('waPhone').value || '').replace(/\D/g, ''), full = ph.length === 10 ? '91' + ph : ph;
+      if (full.length < 12) { toast('Enter valid phone', 'err'); return; }
+      window.open(`https://wa.me/${full}?text=${encodeURIComponent(buildWAMsg(LAST_BILL))}`, '_blank');
+    };
+    window.viewBill = function (id) { const b = BILLS.find(x => x.id === id); if (!b) return; LAST_BILL = b; openWASheet(b); };
+    window.closeSheet = function () { $('waSheet').classList.remove('on'); };
+
+    // ── CUSTOMERS (with pagination + filters) ────────────────────────────────────
+    window.renderCusts = function () {
+      const q = ($('custSearch')?.value || '').toLowerCase();
+      const period = $('custFilterPeriod')?.value || '6m';
+      const payFilt = $('custFilterPay')?.value || 'all';
+      const now = new Date();
+
+      // Period filter on lastVisit
+      let filtered = CUSTS.filter(c => {
+        if (!c.name?.toLowerCase().includes(q) && !c.phone?.includes(q)) return false;
+        if (period !== 'all') {
+          const months = period === '6m' ? 6 : 12;
+          const cutoff = new Date(now); cutoff.setMonth(cutoff.getMonth() - months);
+          if (!c.lastVisit || new Date(c.lastVisit) < cutoff) return false;
+        }
+        return true;
+      });
+
+      // Payment status filter
+      if (payFilt !== 'all') {
+        filtered = filtered.filter(c => {
+          const custBills = BILLS.filter(b => b.custId === c.id || b.phone === c.phone);
+          const hasPartial = custBills.some(b => billStatus(b) === 'partial' || billStatus(b) === 'pending');
+          const allPaid = custBills.length > 0 && custBills.every(b => billStatus(b) === 'paid');
+          if (payFilt === 'partial') return hasPartial;
+          if (payFilt === 'paid') return allPaid;
+          return true;
+        });
+      }
+
+      filtered.sort((a, b) => (b.lastVisit || '') > (a.lastVisit || '') ? 1 : -1);
+
+      // Hard cap notice
+      const total = filtered.length;
+      const capped = Math.min(total, CUST_LIMIT);
+      const display = filtered.slice(0, CUST_LIMIT);
+      const maxPage = Math.max(1, Math.ceil(display.length / CUST_PER_PAGE));
+      if (CUST_PAGE > maxPage) CUST_PAGE = maxPage;
+      const paged = display.slice((CUST_PAGE - 1) * CUST_PER_PAGE, CUST_PAGE * CUST_PER_PAGE);
+
+      $('custCount').textContent = `${paged.length} shown · ${total} total`;
+      $('custLimitNote').textContent = total > CUST_LIMIT
+        ? `⚠ Showing first ${CUST_LIMIT} of ${total}. Use Export to download all.` : '';
+
+      const stColor = { paid: 'var(--green)', partial: 'var(--amber)', pending: 'var(--red)' };
+      const stLabel = { paid: 'Paid', partial: 'Partial', pending: 'Pending' };
+
+      $('custList').innerHTML = paged.length === 0
+        ? `<div class="empty"><div class="e-icon">👤</div><p>No customers found</p></div>`
+        : paged.map(c => {
+          const cb = BILLS.filter(b => b.custId === c.id || b.phone === c.phone);
+          const hasDue = cb.some(b => billStatus(b) !== 'paid');
+          const totalDue = cb.reduce((s, b) => s + billDue(b), 0);
+          return `<div class="card-sm" onclick="openCustModal('${c.id}')" style="cursor:pointer;">
+          <div style="display:flex;justify-content:space-between;align-items:center;">
+            <div>
+              <div style="font-weight:700;font-size:13px;">${c.name}</div>
+              <div style="font-size:11px;color:var(--muted2);margin-top:2px;">📞 ${c.phone}${c.age ? ' · Age ' + c.age : ''} · Last: ${c.lastVisit || '—'}</div>
+              ${hasDue ? `<div style="font-size:10px;color:var(--red);margin-top:2px;">Due: ${fmt(totalDue)}</div>` : ''}
+            </div>
+            <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px;">
+              <div style="color:var(--accent);font-size:18px;">›</div>
+              <div style="font-size:10px;font-weight:700;color:${hasDue ? 'var(--amber)' : 'var(--green)'};">${hasDue ? '⚠ Due' : '✓ Clear'}</div>
+            </div>
+          </div>
+        </div>`;
+        }).join('');
+
+      const pag = $('custPagination');
+      if (display.length > CUST_PER_PAGE) {
+        pag.style.display = 'flex';
+        $('custPageInfo').textContent = `Page ${CUST_PAGE} of ${maxPage} (${display.length})`;
+        pag.querySelector('button:first-child').disabled = CUST_PAGE <= 1;
+        pag.querySelector('button:last-child').disabled = CUST_PAGE >= maxPage;
+      } else { pag.style.display = 'none'; }
+    };
+    window.custNext = function () { const m = Math.ceil(Math.min(CUSTS.length, CUST_LIMIT) / CUST_PER_PAGE); if (CUST_PAGE < m) { CUST_PAGE++; renderCusts(); } };
+    window.custPrev = function () { if (CUST_PAGE > 1) { CUST_PAGE--; renderCusts(); } };
+
+    // Export customers as JSON (full, no limit)
+    window.exportCustomersJSON = function () {
+      const now = new Date();
+      const year = now.getFullYear();
+      const data = CUSTS.map(c => {
+        const cb = BILLS.filter(b => b.custId === c.id || b.phone === c.phone);
+        return { ...c, bills: cb };
+      });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' }));
+      a.download = `customers-${year}.json`;
+      a.click();
+      toast(`Exported ${data.length} customers`, 'ok');
+    };
+
+    // ── CUSTOMER MODAL — FULL HISTORY TIMELINE ──────────────────────────────────
+    window.openCustModal = function (id) {
+      const c = CUSTS.find(x => x.id === id); if (!c) return;
+      CUR_CUST_ID = id;
+      const cb = BILLS.filter(b => b.custId === id || b.phone === c.phone).sort((a, b) => new Date(b.date || 0) - new Date(a.date || 0));
+      const totalSpent = cb.reduce((s, b) => s + Number(b.total || 0), 0);
+      const totalPaid = cb.reduce((s, b) => s + billPaidAmount(b), 0);
+      const totalDue = cb.reduce((s, b) => s + billDue(b), 0);
+      $('custModalTitle').textContent = c.name;
+
+      // Build timeline
+      const tlHTML = cb.length === 0
+        ? `<div class="empty" style="padding:16px;"><div class="e-icon">🧾</div><p>No bills yet</p></div>`
+        : `<div class="timeline">${cb.map(b => {
+          const st = billStatus(b), due = billDue(b), paid = billPaidAmount(b);
+          const rx = b.rx, hasRx = rx && (rx.R?.sph || rx.R?.cyl || rx.L?.sph || rx.L?.cyl);
+          const stBadge = st === 'paid' ? `<span class="badge b-green">Paid</span>` : st === 'partial' ? `<span class="badge b-amber">Partial</span>` : `<span class="badge b-red">Pending</span>`;
+          const rxBlock = hasRx
+            ? `<div class="tl-rx">👁 R: SPH ${rx.R?.sph || '—'} CYL ${rx.R?.cyl || '—'} AXIS ${rx.R?.axis || '—'}<br/>👁 L: SPH ${rx.L?.sph || '—'} CYL ${rx.L?.cyl || '—'} AXIS ${rx.L?.axis || '—'}</div>` : '';
+          const itemsStr = (b.items || []).map(it => `${it.desc} ×${it.qty}`).join(', ');
+          // Payment log
+          const plogHTML = (b.paymentLog || []).length > 0
+            ? `<div style="margin-top:6px;">${(b.paymentLog || []).map(p => `<div class="plog"><span class="plog-meta">${p.date} · ${p.mode}</span><span class="plog-amt">+${fmt(p.amount)}</span></div>`).join('')}</div>` : '';
+          const addPayBtn = (st === 'partial' || st === 'pending')
+            ? `<button class="btn btn-green btn-sm" onclick="closeModal();openAddPayment('${b.id}');" style="margin-top:6px;width:100%;">+ Add Payment (Due: ${fmt(due)})</button>` : '';
+          return `<div class="tl-item">
+          <div class="tl-dot ${st}"></div>
+          <div class="tl-card">
+            <div class="tl-date"><span>${b.date || '—'}</span>${stBadge}</div>
+            <div class="tl-bill">${b.billNo || ''} ${b.doctor ? '· Dr. ' + b.doctor : ''}</div>
+            <div class="tl-items">${itemsStr || '—'}</div>
+            ${rxBlock}
+            <div class="tl-pay">
+              <div>
+                <div class="tl-total">${fmt(b.total)}</div>
+                ${due > 0 ? `<div style="font-size:10px;color:var(--red);">Paid: ${fmt(paid)} · Due: ${fmt(due)}</div>` : ''}
+              </div>
+              <div style="display:flex;gap:5px;align-items:center;">
+                <button class="btn btn-ghost btn-sm" onclick="viewBill('${b.id}');closeModal();">💬 WA</button>
+                <button class="btn btn-ghost btn-sm" onclick="delBill('${b.id}')" style="color:var(--red);">🗑</button>
+              </div>
+            </div>
+            ${plogHTML}
+            ${addPayBtn}
+          </div>
+        </div>`;
+        }).join('')}</div>`;
+
+      $('custModalBody').innerHTML = `
+    <div style="font-size:12px;line-height:2;color:var(--muted2);margin-bottom:10px;">
+      📞 <strong style="color:var(--textfinalcolor)">${c.phone}</strong>
+      ${c.age ? `· 🎂 <strong style="color:var(--textfinalcolor)">${c.age} yrs</strong>` : ''}
+      <br/>📅 First visit: <strong style="color:var(--textfinalcolor)">${c.firstVisit || '—'}</strong>
+      · Last: <strong style="color:var(--textfinalcolor)">${c.lastVisit || '—'}</strong>
+    </div>
+    <!-- Lifetime summary -->
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-bottom:12px;">
+      <div style="background:var(--accent-lt);border-radius:9px;padding:8px;text-align:center;">
+        <div style="font-size:9px;color:var(--muted);text-transform:uppercase;font-weight:700;">Bills</div>
+        <div style="font-family:var(--head);font-size:20px;color:var(--accent);">${cb.length}</div>
+      </div>
+      <div style="background:rgba(0,168,84,.08);border-radius:9px;padding:8px;text-align:center;">
+        <div style="font-size:9px;color:var(--muted);text-transform:uppercase;font-weight:700;">Paid</div>
+        <div style="font-family:var(--head);font-size:16px;color:var(--green);">${fmt(totalPaid)}</div>
+      </div>
+      <div style="background:rgba(229,57,53,.07);border-radius:9px;padding:8px;text-align:center;">
+        <div style="font-size:9px;color:var(--muted);text-transform:uppercase;font-weight:700;">Due</div>
+        <div style="font-family:var(--head);font-size:16px;color:${totalDue > 0 ? 'var(--red)' : 'var(--green)'};">${fmt(totalDue)}</div>
+      </div>
+    </div>
+    <div class="section-title" style="margin-bottom:8px;">Visit Timeline</div>
+    ${tlHTML}`;
+      $('custModal').classList.add('on');
+    };
+
+    window.waCust = function () { const c = CUSTS.find(x => x.id === CUR_CUST_ID); if (!c) return; const ph = (c.phone || '').replace(/\D/g, ''); window.open(`https://wa.me/${ph.length === 10 ? '91' + ph : ph}`, '_blank'); closeModal(); };
+    window.rebill = function () {
+      const c = CUSTS.find(x => x.id === CUR_CUST_ID); if (!c) return; closeModal(); clearBill();
+      if ($('bName')) $('bName').value = c.name;
+      if ($('bPhone')) $('bPhone').value = c.phone;
+      if ($('bAge')) $('bAge').value = c.age || '';
+      if (c.rx) { ['sph', 'cyl', 'axis', 'add', 'va'].forEach(f => { if ($(`rR${f}`)) $(`rR${f}`).value = c.rx.R?.[f] || ''; if ($(`rL${f}`)) $(`rL${f}`).value = c.rx.L?.[f] || ''; }); }
+      CUR_CUST_ID = c.id; nav('bill'); toast(`Loaded ${c.name}`, 'ok');
+    };
+    window.autofillCust = function (val) {
+      if (val.length < 2) return;
+      const m = CUSTS.find(c => c.name.toLowerCase().startsWith(val.toLowerCase()));
+      if (m) {
+        if ($('bPhone')) $('bPhone').value = m.phone; if ($('bAge')) $('bAge').value = m.age || '';
+        if (m.rx) { ['sph', 'cyl', 'axis', 'add', 'va'].forEach(f => { if ($(`rR${f}`)) $(`rR${f}`).value = m.rx.R?.[f] || ''; if ($(`rL${f}`)) $(`rL${f}`).value = m.rx.L?.[f] || ''; }); }
+        CUR_CUST_ID = m.id;
+      }
+    };
+
+    // ── STOCK ─────────────────────────────────────────────────────────────────────
+    window.toggleGroup = function (sid) { const b = $(`grp-${sid}`), h = document.querySelector(`[data-gid="${sid}"]`); if (!b || !h) return; const c = b.classList.toggle('collapsed'); h.classList.toggle('collapsed', c); };
+    window.toggleStockSelect = function (id, el) { if (el.checked) SELECTED_STOCK.add(id); else SELECTED_STOCK.delete(id); updateBulkBar(); };
+    function updateBulkBar() { const bar = $('bulkBar'); if (SELECTED_STOCK.size > 0) { bar.classList.add('on'); $('bulkCount').textContent = SELECTED_STOCK.size; } else bar.classList.remove('on'); }
+    window.clearBulkSelection = function () { SELECTED_STOCK.clear(); updateBulkBar(); renderStock(); };
+    window.bulkDeleteSelected = async function () {
+      if (!SELECTED_STOCK.size) return;
+      if (!confirm(`Delete ${SELECTED_STOCK.size} item(s)?`)) return;
+      showBlocker(`Deleting ${SELECTED_STOCK.size} items…`); let done = 0;
+      for (const id of SELECTED_STOCK) { await fbDel('stock', id); done++; setProgress(`Deleted ${done} of ${SELECTED_STOCK.size}…`); }
+      SELECTED_STOCK.clear(); STOCK = await fbAll('stock'); hideBlocker(); updateBulkBar(); renderStock(); renderDash(); toast(`${done} items deleted!`, 'ok');
+    };
+    window.deleteAllOOS = async function () {
+      const oos = STOCK.filter(s => Number(s.qty) <= 0); if (!oos.length) return;
+      if (!confirm(`Delete all ${oos.length} out-of-stock items?`)) return;
+      showBlocker('Deleting…');
+      for (let i = 0; i < oos.length; i++) { await fbDel('stock', oos[i].id); setProgress(`Deleted ${i + 1} of ${oos.length}…`); }
+      STOCK = await fbAll('stock'); hideBlocker(); renderStock(); renderDash(); toast('OOS items deleted', 'ok');
+    };
+    function renderStock() {
+      const catF = ($('stockCatFilter')?.value || ''), filtered = catF ? STOCK.filter(s => s.cat === catF) : STOCK;
+      const oos = filtered.filter(s => Number(s.qty) <= 0), inStock = filtered.filter(s => Number(s.qty) > 0);
+      if (inStock.length === 0 && oos.length === 0) { $('stockList').innerHTML = `<div class="empty"><div class="e-icon">📦</div><p>${catF ? 'No items in this category' : 'No stock items yet'}</p></div>`; $('oosSection').style.display = 'none'; return; }
+      const groups = {};
+      inStock.forEach(s => { const k = s.cat || 'Other'; if (!groups[k]) groups[k] = []; groups[k].push(s); });
+      $('stockList').innerHTML = Object.entries(groups).map(([cat, items]) => {
+        const lowCnt = items.filter(s => Number(s.qty) <= Number(s.minQty || 5)).length;
+        const sid = cat.replace(/[^a-zA-Z0-9]/g, '_');
+        const rows = items.map(s => {
+          const low = Number(s.qty) <= Number(s.minQty || 5); return `<div class="stock-row${low ? ' low-stock' : ''}">
+      <div><input type="checkbox"${SELECTED_STOCK.has(s.id) ? ' checked' : ''} onchange="toggleStockSelect('${s.id}',this)" style="width:15px;height:15px;accent-color:var(--accent);cursor:pointer;"/></div>
+      <div><div class="sri-name">${s.name}</div><div class="sri-meta">${s.cat || '—'}</div></div>
+      <div class="stock-row-prices"><div class="sp-sell">${fmt(s.sellPrice)}</div><div class="sp-cost">cost ${fmt(s.costPrice)}</div></div>
+      <div class="stock-row-qty${low ? ' qty-low' : ' qty-ok'}">${s.qty}<span>${s.unit || 'units'}</span></div>
+      <div class="stock-row-actions"><button class="btn btn-ghost btn-sm" onclick="adjStock('${s.id}',${s.qty},'${s.unit || 'units'}')">±</button></div>
+    </div>`;
+        }).join('');
+        return `<div class="stock-group"><div class="stock-group-header" data-gid="${sid}" onclick="toggleGroup('${sid}')"><span>${cat} <span class="sg-meta">${items.length} item${items.length !== 1 ? 's' : ''}${lowCnt ? ` · ⚠${lowCnt} low` : ''}</span></span><span class="sg-arrow">▼</span></div><div class="stock-group-body" id="grp-${sid}" style="max-height:3000px;">${rows}</div></div>`;
+      }).join('');
+      if (oos.length > 0) {
+        $('oosSection').style.display = 'block';
+        $('oosList').innerHTML = oos.map(s => `<div class="stock-row out-stock">
+      <div><input type="checkbox"${SELECTED_STOCK.has(s.id) ? ' checked' : ''} onchange="toggleStockSelect('${s.id}',this)" style="width:15px;height:15px;accent-color:var(--accent);cursor:pointer;"/></div>
+      <div><div class="sri-name">${s.name}</div><div class="sri-meta">${s.cat || '—'}</div></div>
+      <div class="stock-row-prices"><div class="sp-sell">${fmt(s.sellPrice)}</div><div class="sp-cost">cost ${fmt(s.costPrice)}</div></div>
+      <div class="stock-row-qty" style="color:var(--amber)">0<span>${s.unit || 'units'}</span></div>
+      <div class="stock-row-actions"><button class="btn btn-ghost btn-sm" onclick="adjStock('${s.id}',0,'${s.unit || 'units'}')">±</button><button class="btn btn-red btn-sm" onclick="delStock('${s.id}')">✕</button></div>
+    </div>`).join('');
+      } else $('oosSection').style.display = 'none';
+    }
+    window.openStockModal = function () { ['stName', 'stQty', 'stMin', 'stCost', 'stSell'].forEach(id => { if ($(id)) $(id).value = ''; }); $('stockModal').classList.add('on'); };
+    window.saveStock = async function () {
+      const nm = v('stName'); if (!nm) { toast('Enter item name', 'err'); return; }
+      const btn = $('btnSaveStock'); if (btn) { btn.disabled = true; btn.textContent = '⏳ Saving…'; }
+      freezeUI();
+      try { await fbAdd('stock', { name: nm, cat: v('stCat'), unit: v('stUnit'), qty: +v('stQty') || 0, minQty: +v('stMin') || 5, costPrice: +v('stCost') || 0, sellPrice: +v('stSell') || 0 }); closeModal(); STOCK = await fbAll('stock'); renderStock(); updateSuggestions(); toast('Item added!', 'ok'); }
+      catch (e) { toast('Error: ' + e.message, 'err'); }
+      finally { unfreezeUI(); if (btn) { btn.disabled = false; btn.textContent = 'Save Item'; } }
+    };
+    window.adjStock = async function (id, cur, unit) {
+      const nq = prompt(`Current: ${cur} ${unit}\nEnter new quantity:`); if (nq === null || isNaN(nq)) return;
+      freezeUI();
+      try { await fbPatch('stock', id, { qty: +nq }); STOCK = await fbAll('stock'); renderStock(); renderDash(); toast('Stock updated', 'ok'); }
+      finally { unfreezeUI(); }
+    };
+    window.delStock = async function (id) {
+      if (!confirm('Remove this item?')) return;
+      freezeUI();
+      try { await fbDel('stock', id); STOCK = await fbAll('stock'); renderStock(); toast('Removed', 'info'); }
+      finally { unfreezeUI(); }
+    };
+
+    // ── JSON BULK UPLOAD ──────────────────────────────────────────────────────────
+    window.openJsonUploadModal = function () { $('jsonModal').classList.add('on'); };
+    window.downloadJsonTemplate = function () {
+      const t = [{ name: "CR39 Single Vision", cat: "Lens – Single Vision", unit: "Pairs", qty: 20, minQty: 5, costPrice: 150, sellPrice: 400 }, { name: "Metal Frame – Black", cat: "Frame – Metal", unit: "Pieces", qty: 15, minQty: 3, costPrice: 200, sellPrice: 600 }];
+      const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([JSON.stringify(t, null, 2)], { type: 'application/json' })); a.download = 'stock-template.json'; a.click(); toast('Template downloaded!', 'ok');
+    };
+    window.handleJsonUpload = async function (e) {
+      const file = e.target.files[0]; if (!file) return;
+      closeModal(); await sleep(100); showBlocker('Reading JSON file…'); await sleep(200);
+      let items;
+      try { const text = await file.text(); items = JSON.parse(text); if (!Array.isArray(items)) throw new Error('Root must be a JSON array [ ]'); }
+      catch (err) { hideBlocker(); toast('Invalid JSON: ' + err.message, 'err'); e.target.value = ''; return; }
+      const valid = items.filter(it => it.name && typeof it.name === 'string' && it.name.trim() !== '');
+      if (!valid.length) { hideBlocker(); toast('No valid items', 'err'); e.target.value = ''; return; }
+      setProgress(`Found ${valid.length} valid items…`);
+      let added = 0, updated = 0, errors = 0;
+      for (let i = 0; i < valid.length; i++) {
+        const it = valid[i], exists = STOCK.find(s => s.name.trim().toLowerCase() === it.name.trim().toLowerCase());
+        if (exists) { await fbPatch('stock', exists.id, { qty: Number(it.qty) || 0, costPrice: Number(it.costPrice) || 0, sellPrice: Number(it.sellPrice) || 0 }); updated++; }
+        else { const res = await fbAdd('stock', { name: it.name.trim(), cat: it.cat || 'Other', unit: it.unit || 'Pieces', qty: Number(it.qty) || 0, minQty: Number(it.minQty) || 5, costPrice: Number(it.costPrice) || 0, sellPrice: Number(it.sellPrice) || 0 }); if (res) added++; else errors++; }
+        setProgress(`Processed ${i + 1} of ${valid.length}… (${added} added, ${updated} updated)`);
+      }
+      STOCK = await fbAll('stock'); hideBlocker(); renderStock(); updateSuggestions(); renderDash();
+      const sk = items.length - valid.length;
+      toast(`✓ ${added} added, ${updated} updated${sk ? `, ${sk} skipped` : ''}${errors ? `, ${errors} errors` : ''}`, added + updated > 0 ? 'ok' : 'err');
+      e.target.value = '';
+    };
+
+    // ── FOLLOW-UP ─────────────────────────────────────────────────────────────────
+    function renderFU() {
+      const now = new Date(), c = CFG || {};
+      const due = BILLS.filter(b => { if (!b.date) return false; const m = (now - new Date(b.date)) / (1000 * 60 * 60 * 24 * 30); return m >= 7 && m <= 8; });
+      $('fuList').innerHTML = due.length === 0
+        ? `<div class="empty"><div class="e-icon">🎉</div><p>No follow-ups due right now.</p></div>`
+        : due.map(b => {
+          const ph = (b.phone || '').replace(/\D/g, ''), full = ph.length === 10 ? '91' + ph : ph; const msg = `Hello ${b.custName} 😊\n\nIt's been 7–8 months since your last eye checkup at *${c.shopName || 'Eye Glass Optics'}*.\n\nWe recommend a checkup to verify your prescription.\n\n📅 Call us to book!\n📞 ${c.phone || ''} | ${brLabel()}`;
+          return `<div class="fu-card"><div><div class="fc-name">${b.custName}</div><div class="fc-sub">📞 ${b.phone} · ${b.date}</div></div><a href="https://wa.me/${full}?text=${encodeURIComponent(msg)}" target="_blank"><button class="btn btn-wa btn-sm">Remind 💬</button></a></div>`;
+        }).join('');
+    }
+
+    // ── SETTINGS ──────────────────────────────────────────────────────────────────
+    function loadSettings() { const c = CFG || {}; if ($('sName')) $('sName').value = c.shopName || ''; if ($('sB1')) $('sB1').value = c.b1 || ''; if ($('sB2')) $('sB2').value = c.b2 || ''; if ($('sPhone')) $('sPhone').value = c.phone || ''; if ($('sAddr')) $('sAddr').value = c.addr || ''; if ($('branchLabel')) $('branchLabel').textContent = brLabel(); }
+    window.saveSettings = function () { CFG = { ...CFG, shopName: v('sName'), b1: v('sB1'), b2: v('sB2'), phone: v('sPhone'), addr: v('sAddr') }; localStorage.setItem('oc_cfg', JSON.stringify(CFG)); if ($('branchLabel')) $('branchLabel').textContent = brLabel(); checkBranchVisibility(); toast('Settings saved!', 'ok'); };
+
+    // ── BACKUP / RESTORE ──────────────────────────────────────────────────────────
+    window.exportData = function () { const data = { customers: CUSTS, bills: BILLS, stock: STOCK, cfg: CFG, at: new Date().toISOString() }; const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' })); a.download = `eyeglassoptics-backup-${today()}.json`; a.click(); toast('Backup downloaded!', 'ok'); };
+    window.importData = function (e) { const f = e.target.files[0]; if (!f) return; const r = new FileReader(); r.onload = ev => { try { const d = JSON.parse(ev.target.result); if (d.cfg) { CFG = d.cfg; localStorage.setItem('oc_cfg', JSON.stringify(CFG)); } toast('Restored! Please reload.', 'ok'); } catch { toast('Invalid file', 'err'); } }; r.readAsText(f); };
+    window.backupWA = function () { const c = CFG || {}; const msg = `📦 *Eye Glass Optics Backup*\n🏥 ${c.shopName || 'Shop'}\n📅 ${new Date().toLocaleDateString('en-IN')}\n\n👥 Customers: ${CUSTS.length}\n🧾 Bills: ${BILLS.length}\n📦 Stock: ${STOCK.length} items`; window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`, '_blank'); };
+
+    // ── DELETION LOGIC ──────────────────────────────────────────────────────────
+    window.delBill = async function (id) {
+      if (!confirm('Are you sure you want to delete this bill? This cannot be undone.')) return;
+      freezeUI();
+      try {
+        await fbDel('bills', id);
+        BILLS = BILLS.filter(x => x.id !== id);
+        renderDash();
+        if ($('custModal').classList.contains('on') && CUR_CUST_ID) openCustModal(CUR_CUST_ID);
+        toast('Bill deleted', 'info');
+      } catch (e) { toast('Delete failed: ' + e.message, 'err'); }
+      finally { unfreezeUI(); }
+    };
+
+    window.delCust = async function () {
+      if (!CUR_CUST_ID) return;
+      const c = CUSTS.find(x => x.id === CUR_CUST_ID);
+      if (!c) return;
+      if (!confirm(`Permanently delete record for "${c.name}"? This will NOT delete their bills.`)) return;
+      freezeUI();
+      try {
+        await fbDel('customers', CUR_CUST_ID);
+        CUSTS = CUSTS.filter(x => x.id !== CUR_CUST_ID);
+        closeModal();
+        renderCusts();
+        renderDash();
+        toast('Customer record deleted', 'info');
+      } catch (e) { toast('Delete failed: ' + e.message, 'err'); }
+      finally { unfreezeUI(); }
+    };
+
+    // ── MODAL / OVERLAY CLOSE ────────────────────────────────────────────────────
+    window.closeModal = function () { document.querySelectorAll('.modal-overlay').forEach(m => m.classList.remove('on')); };
+    document.querySelectorAll('.overlay,.modal-overlay').forEach(el => { el.addEventListener('click', e => { if (e.target === el) el.classList.remove('on'); }); });
+  </script>
+</body>
+
+</html>
